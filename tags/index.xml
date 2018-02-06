@@ -6,9 +6,28 @@
     <description>Recent content in Tags on Team-Eur3kA Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Tue, 06 Feb 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://Team-Eur3kA.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Codegate</title>
+      <link>https://Team-Eur3kA.github.io/tags/codegate/</link>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://Team-Eur3kA.github.io/tags/codegate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Codegate 2018</title>
+      <link>https://Team-Eur3kA.github.io/tags/codegate-2018/</link>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://Team-Eur3kA.github.io/tags/codegate-2018/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Welcome</title>
@@ -16,6 +35,15 @@
       <pubDate>Sun, 04 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>https://Team-Eur3kA.github.io/tags/welcome/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Writeup</title>
+      <link>https://Team-Eur3kA.github.io/tags/writeup/</link>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://Team-Eur3kA.github.io/tags/writeup/</guid>
       <description></description>
     </item>
     

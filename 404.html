@@ -15,7 +15,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Hugo 0.35 with theme Tranquilpeak 0.4.3-BETA">
+    <meta name="generator" content="Hugo 0.37 with theme Tranquilpeak 0.4.3-BETA">
     <title>404 Page not found</title>
     <meta name="author" content="Team-Eur3kA">
     <meta name="keywords" content="">
@@ -158,6 +158,26 @@
             <hr>
           </div>
         
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/1/01/">
+                <h3 class="media-heading"></h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 0001
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
+This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
+waf.php
+&lt;?php if(!defined('simple_cms')) exit(); $method = $_SERVER['REQUEST_METHOD']; if($method !== 'GET' &amp;&amp; $method !== 'POST'){ exit('are you hacker?'); } $filter_str = array('or', 'and', 'information', 'schema', 'procedure', 'analyse', 'order', 'by', 'group', 'into'); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
       </div>
     </div>
     <div class="modal-footer">
@@ -165,7 +185,7 @@
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         2 posts found
+         3 posts found
       </p>
     </div>
   </div>

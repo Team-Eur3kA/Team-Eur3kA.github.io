@@ -219,23 +219,12 @@
               <a class="archive-post-title" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-7amebox1-writeup/">CodeGate 2018 7amebox1 Writeup</a>
             </li>
           
-            <li class="archive-post archive-day" data-date="20180204">
-              <a class="archive-post-title" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/">Welcome to Team Eur3kA site</a>
+            <li class="archive-post archive-day" data-date="20180206">
+              <a class="archive-post-title" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/">CodeGate 2018 Web Writeup</a>
             </li>
           
-        </ul>
-      
-    </div>
-  
-    
-    <div class="archive archive-year box" data-date="0001">
-      <h4 class="archive-title" style="text-decoration: none;">0001</h4>
-      
-        <ul class="archive-posts archive-month" data-date="000101">
-          <h5 class="archive-title" style="text-decoration: none;">January</h5>
-          
-            <li class="archive-post archive-day" data-date="00010101">
-              <a class="archive-post-title" href="https://Team-Eur3kA.github.io/1/01/"></a>
+            <li class="archive-post archive-day" data-date="20180204">
+              <a class="archive-post-title" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/">Welcome to Team Eur3kA site</a>
             </li>
           
         </ul>
@@ -315,6 +304,23 @@
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/">
+                <h3 class="media-heading">CodeGate 2018 Web Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/">
                 <h3 class="media-heading">Welcome to Team Eur3kA site</h3>
               </a>
@@ -325,26 +331,6 @@
               </span>
               <div class="media-content hide-xs font-merryweather"><p>Welcome a lot to visit Team Eur3kA offitial site.
 </p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/1/01/">
-                <h3 class="media-heading"></h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Jan 1, 0001
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
-This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
-waf.php
-&lt;?php if(!defined('simple_cms')) exit(); $method = $_SERVER['REQUEST_METHOD']; if($method !== 'GET' &amp;&amp; $method !== 'POST'){ exit('are you hacker?'); } $filter_str = array('or', 'and', 'information', 'schema', 'procedure', 'analyse', 'order', 'by', 'group', 'into'); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !</div>
             </div>
             <div style="clear:both;"></div>
             <hr>

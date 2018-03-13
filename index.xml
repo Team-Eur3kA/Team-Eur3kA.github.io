@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>CodeGate 2018 Web Writeup</title>
+      <link>https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/</link>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Welcome to Team Eur3kA site</title>
       <link>https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/</link>
       <pubDate>Sun, 04 Feb 2018 00:00:00 +0000</pubDate>
@@ -28,18 +37,6 @@
       <guid>https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/</guid>
       <description>&lt;p&gt;Welcome a lot to visit Team Eur3kA offitial site.
 &lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://Team-Eur3kA.github.io/1/01/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://Team-Eur3kA.github.io/1/01/</guid>
-      <description>codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
-This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
-waf.php
-&amp;lt;?php if(!defined(&#39;simple_cms&#39;)) exit(); $method = $_SERVER[&#39;REQUEST_METHOD&#39;]; if($method !== &#39;GET&#39; &amp;amp;&amp;amp; $method !== &#39;POST&#39;){ exit(&#39;are you hacker?&#39;); } $filter_str = array(&#39;or&#39;, &#39;and&#39;, &#39;information&#39;, &#39;schema&#39;, &#39;procedure&#39;, &#39;analyse&#39;, &#39;order&#39;, &#39;by&#39;, &#39;group&#39;, &#39;into&#39;); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&amp;gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !</description>
     </item>
     
   </channel>

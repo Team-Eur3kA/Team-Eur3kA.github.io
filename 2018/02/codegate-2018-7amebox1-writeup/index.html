@@ -1089,7 +1089,7 @@ p.interactive()
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/" data-tooltip="Welcome to Team Eur3kA site">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/" data-tooltip="CodeGate 2018 Web Writeup">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -1175,7 +1175,7 @@ p.interactive()
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/" data-tooltip="Welcome to Team Eur3kA site">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/" data-tooltip="CodeGate 2018 Web Writeup">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -1325,6 +1325,23 @@ p.interactive()
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/">
+                <h3 class="media-heading">CodeGate 2018 Web Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/">
                 <h3 class="media-heading">Welcome to Team Eur3kA site</h3>
               </a>
@@ -1335,26 +1352,6 @@ p.interactive()
               </span>
               <div class="media-content hide-xs font-merryweather"><p>Welcome a lot to visit Team Eur3kA offitial site.
 </p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/1/01/">
-                <h3 class="media-heading"></h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Jan 1, 0001
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">codegate 2018 Web writeup Simple CMS Reference: write up from 0ops
-This challenge is a sql injection challenge. In this challenge, we can get the source code of the CMS. First we can se that there is a waf for the whole cms:
-waf.php
-&lt;?php if(!defined('simple_cms')) exit(); $method = $_SERVER['REQUEST_METHOD']; if($method !== 'GET' &amp;&amp; $method !== 'POST'){ exit('are you hacker?'); } $filter_str = array('or', 'and', 'information', 'schema', 'procedure', 'analyse', 'order', 'by', 'group', 'into'); function escape_str($array) { if(is_array($array)) { foreach($array as $key =&gt; $value) { if(is_array($value)) { $array[$key] = escape_str($value); } else { $array[$key] = filter($value); } } } else { $array = filter($array); } return $array; } function filter($str){ global $filter_str; foreach ($filter_str as $value) { if(stripos($str, $value) !</div>
             </div>
             <div style="clear:both;"></div>
             <hr>

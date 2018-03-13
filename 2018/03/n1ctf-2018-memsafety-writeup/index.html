@@ -260,7 +260,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>So this is a quite interesting challenge, since it uses my favorite <code>Rust</code>!</p>
+<p>This is actually a quite interesting challenge for it uses my favorite <code>Rust</code>!</p>
 
 <p>After unzipping, there is a binary along with a <code>.rs</code> file and a libc.</p>
 
@@ -270,11 +270,11 @@
 └── main.rs
 </code></pre>
 
-<p>First, let&rsquo;s go through the <a href="https://github.com/Team-Eur3kA/n1ctf-2018/blob/master/source/pwn/memsafety/src/main.rs">source code it provided</a>. It is a &ldquo;calculator&rdquo; that is able to accept some commands.</p>
+<p>Let&rsquo;s go through the <a href="https://github.com/Team-Eur3kA/n1ctf-2018/blob/master/source/pwn/memsafety/src/main.rs">source code it provided</a>. It is a &ldquo;calculator&rdquo; that is able to accept some commands.</p>
 
 <p>There is 3 kinds of commands, a number, a string or a vector. Vector is in a form like a python list.A global object is there to provide the ability to save the operated number, string or vector. Since we have the source, the logic is not hard to be clear.</p>
 
-<p>So where is the bug? Firstly I searched keyword &ldquo;unsafe&rdquo;, since it is related to what is unsafe in <code>Rust</code> compiled binary. Unfortunately, there is none. Then I get really confused when there is no such unsafe part, how can it be unsafe? I decided to compile my own and add some <code>println!()</code> to print some information. Then things are getting better.</p>
+<p>Where is the bug? I searched keyword &ldquo;unsafe&rdquo; on my instinct, since it is related to what is unsafe in <code>Rust</code> compiled binary, unfortunately, there is none. This confuses me when there is no such unsafe part, how can it be unsafe? I try to compile my own binary to instrument some <code>println!()</code> to print some information. That&rsquo;s when things are getting better.</p>
 
 <p>When I try to compile it using my <code>1.26 nightly rustc</code>, I get following result:</p>
 
@@ -294,7 +294,7 @@ error: aborting due to previous error
 If you want more information on this error, try using &quot;rustc --explain E0382&quot;
 </code></pre>
 
-<p>Since I use Rust sometimes, I am familiar with this bug. Let&rsquo;s stop a little while to understand what the hell is the <code>moved value</code>.</p>
+<p>One uses <code>Rust</code> a lot is surely familiar with this bug. Let&rsquo;s stop a little while to understand what the hell is the <code>moved value</code>.</p>
 
 <h2 id="rust-ownership-101">Rust Ownership 101</h2>
 
@@ -320,13 +320,13 @@ What we really need to know, is that there is a lifetime of a binding. When the 
 
 <h2 id="back-to-our-problem">Back to our problem</h2>
 
-<p>According to the error message before, we know the problem is like we moved a value somewhere, but we are still using it. Think of something? Yup, UAF.</p>
+<p>According to the error message before, we know the problem is like we moved a value somewhere, while we are still using it. Think of something? Yup, UAF.</p>
 
-<p>Since a value is moved elsewhere, when that value goes out of scope, it will be collected, but that value is also used, UAF is very obvious. The &ldquo;<code>Copy</code> trait&rdquo; in the &ldquo;note&rdquo; part of the error message shows that it is no copiable, which means it will not be copied, this ensures the vulnerability.</p>
+<p>Since a value is moved elsewhere, when that value goes out of scope, it will be collected, but that value is still usable, UAF is very obvious in this way. The &ldquo;<code>Copy</code> trait&rdquo; in the &ldquo;note&rdquo; part of the error message shows that it is no copiable, which means it will not be copied, this ensures the vulnerability.</p>
 
 <h2 id="jemalloc-problem">Jemalloc problem</h2>
 
-<p>By analysis a little bit, we are sure it uses the default <code>jemalloc</code> allocator. I don&rsquo;t know much about this allocator, but my leader @Atum tells me that I can&rsquo;t change the meta-data like we used to do with libc malloc. So how can we use this UAF problem? I wrote a PoC to know that how double free is handled, to our surprise, a mature allocator like this just allows it!</p>
+<p>By analyze a little bit, we are sure it uses the default <code>jemalloc</code> allocator. I don&rsquo;t know much about this allocator, but my leader @Atum tells me that I can&rsquo;t change the meta-data like we used to do with libc malloc. So how can we use this UAF problem? I wrote a PoC to know that how double free is handled, to our surprise, a mature allocator like this just allows it!</p>
 
 <pre><code class="language-Rust">#![feature(allocator_api)]
 #![feature(alloc)]
@@ -361,7 +361,7 @@ fn main() {
 0x7f3ed7815100
 </code></pre>
 
-<p>Now the line is clear. We use double free to control some pointer then get a read or write any where.</p>
+<p>Now we have a thought. We use double free to control some pointer then get a read or write any where.</p>
 
 <h2 id="global-helps">Global helps</h2>
 

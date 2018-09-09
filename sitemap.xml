@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://Team-Eur3kA.github.io/2018/09/twctf-2018-rkm-readablekernelmodule-writeup/</loc>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-network-card-writeup/</loc>
     <lastmod>2018-03-13T00:00:00+00:00</lastmod>
   </url>
@@ -87,7 +92,7 @@
   
   <url>
     <loc>https://Team-Eur3kA.github.io/post/</loc>
-    <lastmod>2018-03-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -99,7 +104,31 @@
   
   <url>
     <loc>https://Team-Eur3kA.github.io/</loc>
-    <lastmod>2018-03-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://Team-Eur3kA.github.io/tags/twctf/</loc>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://Team-Eur3kA.github.io/categories/twctf/</loc>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://Team-Eur3kA.github.io/tags/twctf-2018/</loc>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://Team-Eur3kA.github.io/categories/twctf-2018/</loc>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -117,13 +146,13 @@
   
   <url>
     <loc>https://Team-Eur3kA.github.io/tags/writeup/</loc>
-    <lastmod>2018-03-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://Team-Eur3kA.github.io/categories/writeup/</loc>
-    <lastmod>2018-03-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,10 +6,19 @@
     <description>Recent content on Team-Eur3kA Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 09 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://Team-Eur3kA.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TWCTF-2018 RKM (ReadableKernelModule) writeup</title>
+      <link>https://Team-Eur3kA.github.io/2018/09/twctf-2018-rkm-readablekernelmodule-writeup/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://Team-Eur3kA.github.io/2018/09/twctf-2018-rkm-readablekernelmodule-writeup/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>N1CTF 2018 Network Card Writeup</title>

